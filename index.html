@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chocomigo • Amigo Secreto (12/12/2026)</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        @keyframes bounceSlow { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        .animate-gift { animation: bounceSlow 2s infinite ease-in-out; }
+    </style>
+</head>
+<body class="bg-emerald-950 text-slate-100 min-h-screen flex flex-col justify-between font-sans">
+
+    <!-- HEADER -->
+    <header class="p-6 max-w-4xl mx-auto w-full flex justify-between items-center border-b border-emerald-900/60">
+        <div class="flex items-center gap-3">
+            <span class="text-3xl">🍫🎁</span>
+            <div>
+                <h1 class="text-2xl font-black tracking-wider text-amber-400">CHOCOMIGO</h1>
+                <p class="text-xs text-emerald-300">Troca de Presentes: 12/12/2026</p>
+            </div>
+        </div>
+        <div class="flex gap-2 bg-emerald-900/80 p-1 rounded-xl border border-emerald-700">
+            <button onclick="switchView('portal')" id="btnPortal" class="px-4 py-2 rounded-lg text-sm font-bold bg-amber-500 text-emerald-950 transition">Portal Participante</button>
+            <button onclick="switchView('admin')" id="btnAdmin" class="px-4 py-2 rounded-lg text-sm font-bold text-emerald-200 hover:text-white transition">Painel Admin</button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-3xl mx-auto w-full p-6 my-auto">
+
+        <!-- VISTA: PORTAL DO PARTICIPANTE -->
+        <div id="viewPortal" class="bg-emerald-900/40 border border-emerald-700/50 p-8 rounded-2xl shadow-2xl backdrop-blur-md">
+            <div id="stepEmail">
+                <h2 class="text-2xl font-bold text-amber-400 mb-2 text-center">Portal do Participante</h2>
+                <p class="text-emerald-200 text-sm mb-6 text-center">Insira o seu e-mail registado para receber o código temporário de acesso.</p>
+                <form onsubmit="requestOtp(event)" class="space-y-4">
+                    <input type="email" id="loginEmail" placeholder="O seu e-mail" required class="w-full bg-emerald-950 text-white px-4 py-3 rounded-xl border border-emerald-700 focus:outline-none focus:border-amber-400">
+                    <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-emerald-950 font-bold py-3 rounded-xl transition shadow">Enviar Código por E-mail</button>
+                </form>
+            </div>
+
+            <div id="stepCode" class="hidden">
+                <h2 class="text-2xl font-bold text-amber-400 mb-2 text-center">Verificar Código</h2>
+                <p class="text-emerald-200 text-sm mb-6 text-center" id="codeSentText"></p>
+                <form onsubmit="verifyOtp(event)" class="space-y-4">
+                    <input type="text" id="loginCode" maxlength="6" placeholder="123456" required class="w-full text-center tracking-widest text-2xl bg-emerald-950 text-amber-400 px-4 py-3 rounded-xl border border-emerald-700 focus:outline-none focus:border-amber-400">
+                    <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-emerald-950 font-bold py-3 rounded-xl transition shadow">Entrar na Área Privada</button>
+                </form>
+            </div>
+
+            <div id="stepDashboard" class="hidden space-y-6">
+                <div class="text-center border-b border-emerald-800 pb-4">
+                    <h2 class="text-3xl font-extrabold text-amber-400" id="welcomeName">Olá!</h2>
+                    <p class="text-emerald-200 text-sm mt-1">Orçamento Máximo: <b class="text-amber-400">20 €</b> • Data: <b class="text-white">12/12/2026</b></p>
+                </div>
+
+                <!-- Caixa de Presente -->
+                <div id="giftContainer" class="text-center py-6">
+                    <p class="text-emerald-200 text-sm mb-4">Clica na caixa de presente para descobrir o teu Amigo Secreto:</p>
+                    <div onclick="openGift()" class="cursor-pointer inline-block transform transition hover:scale-105 active:scale-95 animate-gift">
+                        <div class="relative w-36 h-36 bg-red-600 rounded-xl shadow-2xl flex items-center justify-center border-4 border-amber-400 mx-auto">
+                            <div class="absolute inset-y-0 w-8 bg-amber-400"></div>
+                            <div class="absolute inset-x-0 h-8 bg-amber-400"></div>
+                            <div class="absolute -top-5 w-14 h-8 bg-amber-500 rounded-full border-2 border-amber-200 flex items-center justify-center text-xs font-bold text-red-900 shadow">🎁</div>
+                            <span class="relative z-10 text-white font-bold text-sm drop-shadow">Abrir Presente</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="giftResult" class="hidden bg-red-950/80 border-2 border-amber-400 p-6 rounded-xl text-center shadow-inner">
+                    <div class="text-3xl mb-2">🎉🎄✨</div>
+                    <p class="text-xs text-emerald-300 uppercase tracking-widest font-semibold">Tiraste a:</p>
+                    <h3 class="text-3xl font-extrabold text-amber-300 my-2" id="assignedNameDisplay">...</h3>
+                    <div id="targetWishlist" class="mt-4 p-3 bg-emerald-900/80 rounded-lg text-left text-sm border border-emerald-700"></div>
+                </div>
+
+                <!-- Lista de Desejos Pessoal -->
+                <div class="bg-emerald-950/80 p-5 rounded-xl border border-emerald-800">
+                    <h4 class="text-lg font-bold text-amber-400 mb-3">A tua Lista de Desejos 📝</h4>
+                    <form onsubmit="saveWishlist(event)" class="space-y-3">
+                        <textarea id="myWishlistDesc" placeholder="Escreve sugestões de prendas..." class="w-full bg-emerald-900 text-white p-3 rounded-lg border border-emerald-700 text-sm focus:outline-none focus:border-amber-400 h-20"></textarea>
+                        <input type="url" id="myWishlistLink" placeholder="Link de referência (opcional)" class="w-full bg-emerald-900 text-white p-3 rounded-lg border border-emerald-700 text-sm focus:outline-none focus:border-amber-400">
+                        <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-600 text-white font-bold py-2 rounded-lg transition text-sm">Guardar Lista de Desejos</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- VISTA: PAINEL ADMINISTRATIVO -->
+        <div id="viewAdmin" class="hidden bg-emerald-900/40 border border-emerald-700/50 p-8 rounded-2xl shadow-2xl backdrop-blur-md space-y-6">
+            <div class="flex justify-between items-center border-b border-emerald-800 pb-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-amber-400">Painel Administrativo</h2>
+                    <p class="text-xs text-emerald-200">Gestão de Participantes e Sorteio Cego</p>
+                </div>
+                <button onclick="triggerDraw()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-5 rounded-lg shadow border border-amber-400 transition text-sm">🎲 Iniciar Sorteio Cego</button>
+            </div>
+
+            <!-- Adicionar Participante -->
+            <form onsubmit="addParticipant(event)" class="flex gap-3 bg-emerald-950/60 p-4 rounded-xl border border-emerald-800">
+                <input type="text" id="adminName" placeholder="Nome completo" required class="flex-1 bg-emerald-900 text-white px-3 py-2 rounded-lg border border-emerald-700 text-sm focus:outline-none focus:border-amber-400">
+                <input type="email" id="adminEmail" placeholder="E-mail" required class="flex-1 bg-emerald-900 text-white px-3 py-2 rounded-lg border border-emerald-700 text-sm focus:outline-none focus:border-amber-400">
+                <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-emerald-950 font-bold px-5 py-2 rounded-lg transition text-sm">Adicionar</button>
+            </form>
+
+            <!-- Tabela -->
+            <div class="overflow-x-auto rounded-xl border border-emerald-800">
+                <table class="w-full text-left border-collapse text-sm">
+                    <thead>
+                        <tr class="bg-emerald-950 text-amber-400 border-b border-emerald-800">
+                            <th class="p-3">Nome</th>
+                            <th class="p-3">E-mail</th>
+                            <th class="p-3 text-center">Autenticado</th>
+                            <th class="p-3 text-center">Viu Resultado</th>
+                            <th class="p-3 text-right">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="participantsTableBody">
+                        <tr><td colspan="5" class="p-4 text-center text-emerald-400">A carregar participantes...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="p-6 text-center text-xs text-emerald-300/60 border-t border-emerald-900/40">
+        Chocomigo • Evento a 12 de Dezembro de 2026 • Confidencialidade Total Garantida 🎄
+    </footer>
+
+    <!-- SCRIPT DE LIGAÇÃO AO GOOGLE APPS SCRIPT -->
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbyTR_WKMA6Fn4wDlFdRmy9TVbkvlNChrnw_lliQT16R0MIBL727rEnRDdx9OdcAiQxE/exec";
+        let currentParticipantId = null;
+        let participantEmail = "";
+
+        function switchView(view) {
+            if (view === 'portal') {
+                document.getElementById('viewPortal').classList.remove('hidden');
+                document.getElementById('viewAdmin').classList.add('hidden');
+                document.getElementById('btnPortal').className = "px-4 py-2 rounded-lg text-sm font-bold bg-amber-500 text-emerald-950 transition";
+                document.getElementById('btnAdmin').className = "px-4 py-2 rounded-lg text-sm font-bold text-emerald-200 hover:text-white transition";
+            } else {
+                document.getElementById('viewPortal').classList.add('hidden');
+                document.getElementById('viewAdmin').classList.remove('hidden');
+                document.getElementById('btnAdmin').className = "px-4 py-2 rounded-lg text-sm font-bold bg-amber-500 text-emerald-950 transition";
+                document.getElementById('btnPortal').className = "px-4 py-2 rounded-lg text-sm font-bold text-emerald-200 hover:text-white transition";
+                loadAdminParticipants();
+            }
+        }
+
+        async function requestOtp(e) {
+            e.preventDefault();
+            participantEmail = document.getElementById('loginEmail').value;
+            const res = await fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'requestOtp', email: participantEmail })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                document.getElementById('codeSentText').innerText = `Código enviado com sucesso para ${participantEmail}. Verifique a sua caixa de entrada.`;
+                document.getElementById('stepEmail').classList.add('hidden');
+                document.getElementById('stepCode').classList.remove('hidden');
+            } else {
+                alert(data.error || 'Erro ao enviar código.');
+            }
+        }
+
+        async function verifyOtp(e) {
+            e.preventDefault();
+            const code = document.getElementById('loginCode').value;
+            const res = await fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'verifyOtp', email: participantEmail, code: code })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                currentParticipantId = data.participant_id;
+                document.getElementById('welcomeName').innerText = `Olá, ${data.name}!`;
+                document.getElementById('stepCode').classList.add('hidden');
+                document.getElementById('stepDashboard').classList.remove('hidden');
+                loadMyWishlist();
+            } else {
+                alert(data.error || 'Código inválido.');
+            }
+        }
+
+        async function openGift() {
+            const res = await fetch(`${API_URL}?action=getResult&id=${currentParticipantId}`);
+            const data = await res.json();
+            if (res.ok) {
+                document.getElementById('giftContainer').classList.add('hidden');
+                document.getElementById('giftResult').classList.remove('hidden');
+                document.getElementById('assignedNameDisplay').innerText = data.assigned_name;
+                
+                const wlDiv = document.getElementById('targetWishlist');
+                wlDiv.innerHTML = `<p class="text-amber-400 font-bold mb-1">Lista de Desejos do Alvo:</p>
+                                  <p class="text-slate-200 mb-2">${data.description}</p>
+                                  ${data.reference_link ? `<a href="${data.reference_link}" target="_blank" class="text-amber-300 underline text-xs">🔗 Ver link de referência</a>` : ''}`;
+            } else {
+                alert(data.error || 'O sorteio ainda não foi realizado.');
+            }
+        }
+
+        async function loadMyWishlist() {
+            const res = await fetch(`${API_URL}?action=getWishlist&id=${currentParticipantId}`);
+            const data = await res.json();
+            if (res.ok) {
+                document.getElementById('myWishlistDesc').value = data.description || '';
+                document.getElementById('myWishlistLink').value = data.reference_link || '';
+            }
+        }
+
+        async function saveWishlist(e) {
+            e.preventDefault();
+            const description = document.getElementById('myWishlistDesc').value;
+            const reference_link = document.getElementById('myWishlistLink').value;
+            const res = await fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'saveWishlist', participant_id: currentParticipantId, description, reference_link })
+            });
+            if (res.ok) alert('Lista de desejos guardada com sucesso!');
+        }
+
+        async function loadAdminParticipants() {
+            const res = await fetch(`${API_URL}?action=getParticipants`);
+            const data = await res.json();
+            const tbody = document.getElementById('participantsTableBody');
+            tbody.innerHTML = '';
+            data.forEach(p => {
+                tbody.innerHTML += `<tr class="border-b border-emerald-900/60 hover:bg-emerald-900/30">
+                    <td class="p-3 font-medium">${p.name}</td>
+                    <td class="p-3 text-emerald-300">${p.email}</td>
+                    <td class="p-3 text-center">${p.auth_verified ? '✅' : '⏳'}</td>
+                    <td class="p-3 text-center">${p.result_viewed ? '👁️' : '❌'}</td>
+                    <td class="p-3 text-right"><button onclick="removeParticipant('${p.id}')" class="text-red-400 hover:text-red-300 text-xs font-bold px-2 py-1 bg-red-950/60 rounded border border-red-800">Remover</button></td>
+                </tr>`;
+            });
+            if (data.length === 0) tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-emerald-400">Nenhum participante registado.</td></tr>`;
+        }
+
+        async function addParticipant(e) {
+            e.preventDefault();
+            const name = document.getElementById('adminName').value;
+            const email = document.getElementById('adminEmail').value;
+            const res = await fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'addParticipant', name, email })
+            });
+            if (res.ok) {
+                document.getElementById('adminName').value = '';
+                document.getElementById('adminEmail').value = '';
+                loadAdminParticipants();
+            } else {
+                const data = await res.json();
+                alert(data.error || 'Erro ao adicionar.');
+            }
+        }
+
+        async function removeParticipant(id) {
+            if (!confirm('Deseja remover este participante?')) return;
+            await fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'removeParticipant', id })
+            });
+            loadAdminParticipants();
+        }
+
+        async function triggerDraw() {
+            if (!confirm('Tem a certeza que deseja realizar o sorteio? Esta ação é definitiva e cega (o admin não terá acesso aos pares).')) return;
+            const res = await fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'executeDraw' })
+            });
+            const data = await res.json();
+            if (res.ok) alert(data.message);
+            else alert(data.error);
+        }
+    </script>
+</body>
+</html>
