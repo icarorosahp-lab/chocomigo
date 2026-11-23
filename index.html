@@ -3,158 +3,409 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#10251d">
+  <meta name="theme-color" content="#8b1a1a">
   <meta name="description" content="Organiza o teu Amigo Secreto de Natal com o Chocomigo.">
   <title>Chocomigo | Amigo Secreto de Natal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root{--pine:#10251d;--pine-2:#18372b;--pine-3:#214735;--cream:#fffaf0;--paper:#fffdf8;--gold:#d8b46a;--gold-light:#f3dfae;--red:#a83b3b;--muted:#718078;--line:#e9e5da;--shadow:0 24px 70px rgba(8,28,19,.16)}
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{margin:0;min-height:100vh;background:var(--cream);color:#26352d;font-family:"DM Sans",sans-serif}
-    button,input,textarea{font:inherit}
-    button{cursor:pointer}
-    .page-bg{position:fixed;inset:0;z-index:-2;background:radial-gradient(circle at 10% 10%,rgba(216,180,106,.16),transparent 28%),radial-gradient(circle at 90% 75%,rgba(30,91,62,.12),transparent 30%),var(--cream)}
-    .topbar{background:var(--pine);color:#f8f3e7;border-bottom:1px solid rgba(216,180,106,.35)}
-    .topbar-inner{max-width:1120px;margin:auto;padding:15px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-    .brand{display:flex;align-items:center;gap:11px;font-weight:700;letter-spacing:.12em;font-size:13px}
-    .brand-mark{width:37px;height:37px;border:1px solid rgba(243,223,174,.6);border-radius:50%;display:grid;place-items:center;color:var(--gold-light);font-size:19px}
-    .top-date{font-size:12px;color:#d9e1da}
-    .hero{background:linear-gradient(135deg,#10251d 0%,#173c2d 58%,#24523b 100%);color:white;position:relative;overflow:hidden}
-    .hero:before,.hero:after{content:"";position:absolute;border:1px solid rgba(243,223,174,.13);border-radius:50%;width:390px;height:390px;right:-125px;top:-220px}
-    .hero:after{width:270px;height:270px;right:100px;top:-205px}
-    .hero-inner{max-width:1120px;margin:auto;padding:65px 24px 58px;position:relative;z-index:1;text-align:center}
-    .eyebrow{color:var(--gold-light);font-size:11px;letter-spacing:.25em;text-transform:uppercase;font-weight:700}
-    h1{font-family:"Playfair Display",serif;font-size:clamp(42px,7vw,76px);line-height:1.03;margin:15px 0 13px;letter-spacing:-.035em}
-    .hero-copy{max-width:560px;margin:0 auto;color:#d9e5dc;font-size:15px;line-height:1.8}
-    .hero-meta{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:25px}
-    .meta-pill{border:1px solid rgba(243,223,174,.28);background:rgba(255,255,255,.06);padding:9px 14px;border-radius:999px;font-size:12px;color:#f4ead4}
-    .main{max-width:1000px;margin:-25px auto 70px;padding:0 22px;position:relative;z-index:2}
-    .shell{background:var(--paper);border:1px solid rgba(225,218,201,.9);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
-    .nav{display:flex;gap:7px;padding:15px 18px;border-bottom:1px solid var(--line);background:#fffefa;flex-wrap:wrap}
-    .nav button{border:0;background:transparent;color:#66746b;border-radius:10px;padding:11px 16px;font-weight:700;font-size:12px;transition:.2s}
-    .nav button:hover{background:#f3f0e7;color:var(--pine)}
-    .nav button.active{background:var(--pine);color:#fff8e9;box-shadow:0 5px 14px rgba(16,37,29,.16)}
-    .content{padding:clamp(22px,4vw,42px)}
-    .section-head{margin-bottom:25px}
-    .section-kicker{color:#a17c37;text-transform:uppercase;font-size:10px;font-weight:700;letter-spacing:.2em}
-    h2{font-family:"Playfair Display",serif;font-size:30px;color:var(--pine);margin:7px 0 8px}
-    .sub{color:var(--muted);font-size:13px;line-height:1.7;margin:0}
-    .status{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:8px 12px;font-size:11px;font-weight:700;margin-top:17px}
-    .status.open{background:#e8f3e9;color:#28633e}.status.closed{background:#f9e9e6;color:#963d36}
-    .status-dot{width:7px;height:7px;border-radius:50%;background:currentColor}
-    .countdown-wrap{margin:24px 0 28px;padding:20px;background:#f5f2e9;border:1px solid #ebe4d2;border-radius:16px}
-    .countdown-title{text-align:center;color:#66746b;font-size:10px;letter-spacing:.17em;text-transform:uppercase;font-weight:700;margin-bottom:14px}
-    .countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:440px;margin:auto}
-    .time-box{background:white;border:1px solid #ece7db;border-radius:12px;text-align:center;padding:13px 5px}
-    .time-value{display:block;font-family:"Playfair Display",serif;color:var(--pine);font-size:27px;font-weight:700}
-    .time-label{display:block;color:#8a958e;font-size:9px;text-transform:uppercase;letter-spacing:.13em;margin-top:3px}
-    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:17px}
-    .field{display:flex;flex-direction:column;gap:7px}
-    .field.full{grid-column:1/-1}
-    label{font-size:11px;font-weight:700;color:#405148}
-    input,textarea{width:100%;border:1px solid #dddcd2;border-radius:10px;background:#fff;padding:13px 14px;color:#26352d;outline:none;transition:border .2s,box-shadow .2s}
-    input:focus,textarea:focus{border-color:#8caa91;box-shadow:0 0 0 3px rgba(58,112,75,.1)}
-    input::placeholder,textarea::placeholder{color:#a6afa8}
-    textarea{min-height:104px;resize:vertical}
-    .hint{font-size:10px;color:#8a958e;line-height:1.5}
-    .btn{border:0;border-radius:10px;padding:13px 19px;font-weight:700;font-size:12px;transition:transform .2s,box-shadow .2s,background .2s}
-    .btn:hover{transform:translateY(-1px)}
-    .btn-primary{background:var(--pine);color:#fff8e9;box-shadow:0 7px 16px rgba(16,37,29,.15)}
-    .btn-primary:hover{background:#214735}
-    .btn-gold{background:var(--gold);color:#2b2a20}
-    .btn-soft{background:#edf1eb;color:#355541}
-    .btn-danger{background:#f8e9e6;color:#963d36}
-    .form-actions{margin-top:20px;display:flex;justify-content:flex-end}
-    .closed-box{padding:28px;border-radius:15px;background:#f8f3e9;border:1px solid #eee3cf;text-align:center}
-    .closed-icon{font-size:31px}.closed-box h3{font-family:"Playfair Display",serif;color:var(--pine);font-size:23px;margin:10px 0 7px}
-    .closed-box p{color:#718078;font-size:13px;line-height:1.7;margin:0}
-    .divider{height:1px;background:var(--line);margin:27px 0}
-    .portal-card{max-width:520px;margin:auto}
-    .step{background:#f8f7f1;border:1px solid #ece8dc;padding:22px;border-radius:15px}
-    .step h3{font-family:"Playfair Display",serif;color:var(--pine);font-size:21px;margin:0 0 7px}
-    .step p{font-size:12px;color:var(--muted);line-height:1.6;margin:0 0 17px}
-    .step .field{margin-bottom:14px}
-    .gift-card{background:var(--pine);color:white;border-radius:16px;padding:25px;text-align:center}
-    .gift-card .small{color:var(--gold-light);font-size:10px;letter-spacing:.18em;text-transform:uppercase}
-    .gift-card h3{font-family:"Playfair Display",serif;font-size:34px;color:#fff4d8;margin:9px 0 18px}
-    .wishlist{margin-top:18px;padding:18px;background:rgba(255,255,255,.08);border:1px solid rgba(243,223,174,.2);border-radius:12px;text-align:left;font-size:13px;line-height:1.7;color:#e7eee8}
-    .wishlist strong{display:block;color:var(--gold-light);margin-bottom:5px}
-    .wishlist a{color:var(--gold-light);font-weight:700}
-    .admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-    .admin-card{border:1px solid var(--line);border-radius:14px;padding:19px;background:#fffefa}
-    .admin-card h3{font-family:"Playfair Display",serif;color:var(--pine);font-size:19px;margin:0 0 15px}
-    .admin-card .field{margin-bottom:13px}
-    .admin-actions{display:flex;flex-wrap:wrap;gap:8px}
-    .admin-status{font-size:10px;font-weight:700;padding:7px 10px;border-radius:999px;background:#e8f3e9;color:#28633e;display:inline-block;margin-bottom:15px}
-    .participants{border:1px solid var(--line);border-radius:12px;overflow:auto;max-height:330px}
-    .participant-row{display:grid;grid-template-columns:1fr 1.2fr 100px;gap:10px;padding:12px 14px;border-bottom:1px solid #efede6;font-size:11px;align-items:center}
-    .participant-row:last-child{border-bottom:0}
-    .participant-row.head{position:sticky;top:0;background:#f2f3ed;color:#68766d;text-transform:uppercase;font-size:9px;font-weight:700;letter-spacing:.08em}
-    .participant-name{font-weight:700;color:#46574c}.participant-email{color:#718078;overflow-wrap:anywhere}
-    .participant-state{text-align:center}
-    .notice{font-size:11px;color:#8a958e;line-height:1.6;margin-top:12px}
-    footer{text-align:center;padding:0 20px 35px;color:#879189;font-size:11px}
-    footer strong{color:#496253}
-    .hidden{display:none!important}
-    #snow{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:5}
-    .snowflake{position:absolute;top:-25px;color:#d1d9d1;opacity:.55;animation:snowfall linear infinite;text-shadow:0 1px 4px rgba(255,255,255,.7)}
-    @keyframes snowfall{to{transform:translate3d(25px,110vh,0) rotate(260deg)}}
-    .toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);background:var(--pine);color:#fff8e9;padding:12px 18px;border-radius:10px;font-size:12px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.25s;z-index:10}
-    .toast.show{opacity:1;transform:translate(-50%,0)}
-    @media(max-width:700px){.hero-inner{padding:48px 20px 52px}.main{padding:0 12px}.content{padding:23px 18px}.form-grid,.admin-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.topbar-inner{padding:13px 17px}.top-date{font-size:10px}.nav{padding:12px;gap:4px}.nav button{flex:1;padding:10px 7px;font-size:11px}.participant-row{grid-template-columns:1fr 1fr 68px;padding:11px 9px;font-size:10px}}
-    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+    :root {
+      --crimson: #8b1a1a;
+      --crimson-dark: #6b1212;
+      --crimson-deep: #4a0e0e;
+      --pine: #1a3c2e;
+      --pine-light: #2a5a45;
+      --cream: #fdf8f0;
+      --paper: #fffdf9;
+      --gold: #c9a227;
+      --gold-light: #e8d48b;
+      --muted: #6b736c;
+      --line: #e8e2d6;
+      --shadow: 0 20px 50px rgba(75, 14, 14, 0.12);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--cream);
+      color: #2c322c;
+      font-family: "DM Sans", sans-serif;
+    }
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+    .page-bg {
+      position: fixed; inset: 0; z-index: -2;
+      background:
+        radial-gradient(circle at 8% 12%, rgba(201, 162, 39, 0.14), transparent 26%),
+        radial-gradient(circle at 92% 78%, rgba(139, 26, 26, 0.1), transparent 28%),
+        var(--cream);
+    }
+    .topbar {
+      background: linear-gradient(90deg, var(--crimson-deep), var(--crimson));
+      color: #f8f0e8;
+      border-bottom: 1px solid rgba(201, 162, 39, 0.35);
+    }
+    .topbar-inner {
+      max-width: 1120px; margin: auto; padding: 14px 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 700; letter-spacing: 0.14em; font-size: 13px;
+    }
+    .brand-mark {
+      width: 34px; height: 34px;
+      border: 1px solid rgba(232, 212, 139, 0.55);
+      border-radius: 50%;
+      display: grid; place-items: center;
+      color: var(--gold-light); font-size: 16px;
+    }
+    .top-date { font-size: 12px; color: #e8d9d0; }
+    .hero {
+      background: linear-gradient(145deg, #4a0e0e 0%, #8b1a1a 55%, #a52a2a 100%);
+      color: white; position: relative; overflow: hidden;
+    }
+    .hero:before, .hero:after {
+      content: ""; position: absolute;
+      border: 1px solid rgba(232, 212, 139, 0.12);
+      border-radius: 50%; width: 380px; height: 380px;
+      right: -120px; top: -210px;
+    }
+    .hero:after { width: 260px; height: 260px; right: 90px; top: -190px; }
+    .hero-inner {
+      max-width: 1120px; margin: auto; padding: 60px 24px 54px;
+      position: relative; z-index: 1; text-align: center;
+    }
+    .eyebrow {
+      color: var(--gold-light); font-size: 11px;
+      letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700;
+    }
+    h1 {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(40px, 6.5vw, 72px);
+      line-height: 1.04; margin: 14px 0 12px; letter-spacing: -0.03em;
+    }
+    .hero-copy {
+      max-width: 540px; margin: 0 auto;
+      color: #f0e0d8; font-size: 15px; line-height: 1.75;
+    }
+    .hero-meta {
+      display: flex; justify-content: center; flex-wrap: wrap;
+      gap: 10px; margin-top: 24px;
+    }
+    .meta-pill {
+      border: 1px solid rgba(232, 212, 139, 0.3);
+      background: rgba(255, 255, 255, 0.07);
+      padding: 8px 14px; border-radius: 999px;
+      font-size: 12px; color: #f5e9dc;
+    }
+    .main {
+      max-width: 1000px; margin: -22px auto 70px;
+      padding: 0 22px; position: relative; z-index: 2;
+    }
+    .shell {
+      background: var(--paper);
+      border: 1px solid rgba(225, 215, 200, 0.95);
+      border-radius: 20px; box-shadow: var(--shadow); overflow: hidden;
+    }
+    .nav {
+      display: flex; gap: 6px; padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #fffefa; flex-wrap: wrap;
+    }
+    .nav button {
+      border: 0; background: transparent; color: #667066;
+      border-radius: 10px; padding: 10px 15px;
+      font-weight: 700; font-size: 12px; transition: 0.2s;
+    }
+    .nav button:hover { background: #f5f0e8; color: var(--crimson); }
+    .nav button.active {
+      background: var(--crimson); color: #fff8f0;
+      box-shadow: 0 4px 12px rgba(139, 26, 26, 0.2);
+    }
+    .content { padding: clamp(20px, 4vw, 40px); }
+    .section-head { margin-bottom: 24px; }
+    .section-kicker {
+      color: #a07830; text-transform: uppercase;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.18em;
+    }
+    h2 {
+      font-family: "Playfair Display", serif;
+      font-size: 28px; color: var(--crimson-deep); margin: 6px 0 8px;
+    }
+    .sub { color: var(--muted); font-size: 13px; line-height: 1.7; margin: 0; }
+    .status {
+      display: inline-flex; align-items: center; gap: 8px;
+      border-radius: 999px; padding: 7px 12px;
+      font-size: 11px; font-weight: 700; margin-top: 16px;
+    }
+    .status.open { background: #e6f2ea; color: #1e5c3a; }
+    .status.closed { background: #f8e8e6; color: #8b2a2a; }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+    .countdown-wrap {
+      margin: 22px 0 26px; padding: 18px;
+      background: #f7f3ea; border: 1px solid #ebe3d4; border-radius: 14px;
+    }
+    .countdown-title {
+      text-align: center; color: #667066; font-size: 10px;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      font-weight: 700; margin-bottom: 12px;
+    }
+    .countdown {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 10px; max-width: 420px; margin: auto;
+    }
+    .time-box {
+      background: white; border: 1px solid #ebe5d8;
+      border-radius: 12px; text-align: center; padding: 12px 4px;
+    }
+    .time-value {
+      display: block; font-family: "Playfair Display", serif;
+      color: var(--crimson); font-size: 26px; font-weight: 700;
+    }
+    .time-label {
+      display: block; color: #8a918a; font-size: 9px;
+      text-transform: uppercase; letter-spacing: 0.12em; margin-top: 3px;
+    }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field.full { grid-column: 1 / -1; }
+    label { font-size: 11px; font-weight: 700; color: #3d453f; }
+    input, textarea {
+      width: 100%; border: 1px solid #ddd8ce; border-radius: 10px;
+      background: #fff; padding: 12px 13px; color: #2c322c;
+      outline: none; transition: border 0.2s, box-shadow 0.2s;
+    }
+    input:focus, textarea:focus {
+      border-color: #b87a7a;
+      box-shadow: 0 0 0 3px rgba(139, 26, 26, 0.1);
+    }
+    input::placeholder, textarea::placeholder { color: #a3aaa4; }
+    textarea { min-height: 100px; resize: vertical; }
+    .hint { font-size: 10px; color: #8a918a; line-height: 1.5; }
+    .btn {
+      border: 0; border-radius: 10px; padding: 12px 18px;
+      font-weight: 700; font-size: 12px;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: var(--crimson); color: #fff8f0;
+      box-shadow: 0 6px 14px rgba(139, 26, 26, 0.18);
+    }
+    .btn-primary:hover { background: var(--crimson-dark); }
+    .btn-gold { background: var(--gold); color: #2a2410; }
+    .btn-soft { background: #f0ebe3; color: #4a3f35; }
+    .btn-danger { background: #f5e4e2; color: #8b2a2a; }
+    .btn-pine { background: var(--pine); color: #f0f5f2; }
+    .form-actions { margin-top: 18px; display: flex; justify-content: flex-end; }
+    .closed-box {
+      padding: 26px; border-radius: 14px;
+      background: #f8f3ea; border: 1px solid #ebe2d0; text-align: center;
+    }
+    .closed-box h3 {
+      font-family: "Playfair Display", serif;
+      color: var(--crimson-deep); font-size: 22px; margin: 8px 0 6px;
+    }
+    .closed-box p { color: #6b736c; font-size: 13px; line-height: 1.7; margin: 0; }
+    .portal-card { max-width: 520px; margin: auto; }
+    .step {
+      background: #f8f6f0; border: 1px solid #ebe6da;
+      padding: 20px; border-radius: 14px;
+    }
+    .step h3 {
+      font-family: "Playfair Display", serif;
+      color: var(--crimson-deep); font-size: 20px; margin: 0 0 6px;
+    }
+    .step p { font-size: 12px; color: var(--muted); line-height: 1.6; margin: 0 0 16px; }
+    .step .field { margin-bottom: 12px; }
+    .gift-card {
+      background: linear-gradient(145deg, var(--crimson-deep), var(--crimson));
+      color: white; border-radius: 14px; padding: 24px; text-align: center;
+    }
+    .gift-card .small {
+      color: var(--gold-light); font-size: 10px;
+      letter-spacing: 0.16em; text-transform: uppercase;
+    }
+    .gift-card h3 {
+      font-family: "Playfair Display", serif;
+      font-size: 32px; color: #fff4e0; margin: 8px 0 16px;
+    }
+    .wishlist {
+      margin-top: 16px; padding: 16px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(232, 212, 139, 0.22);
+      border-radius: 12px; text-align: left;
+      font-size: 13px; line-height: 1.7; color: #f0e8e0;
+    }
+    .wishlist strong { display: block; color: var(--gold-light); margin-bottom: 4px; }
+    .wishlist a { color: var(--gold-light); font-weight: 700; }
+    .admin-login {
+      max-width: 380px; margin: 0 auto;
+      background: #f8f6f0; border: 1px solid #ebe6da;
+      border-radius: 14px; padding: 24px;
+    }
+    .admin-login h3 {
+      font-family: "Playfair Display", serif;
+      color: var(--crimson-deep); font-size: 22px;
+      margin: 0 0 6px; text-align: center;
+    }
+    .admin-login p {
+      text-align: center; font-size: 12px; color: var(--muted);
+      margin: 0 0 18px;
+    }
+    .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .admin-card {
+      border: 1px solid var(--line); border-radius: 14px;
+      padding: 18px; background: #fffefa;
+    }
+    .admin-card h3 {
+      font-family: "Playfair Display", serif;
+      color: var(--crimson-deep); font-size: 18px; margin: 0 0 14px;
+    }
+    .admin-card .field { margin-bottom: 12px; }
+    .admin-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    .admin-status {
+      font-size: 10px; font-weight: 700; padding: 6px 10px;
+      border-radius: 999px; background: #e6f2ea; color: #1e5c3a;
+      display: inline-block; margin-bottom: 14px;
+    }
+    .participants {
+      border: 1px solid var(--line); border-radius: 12px;
+      overflow: auto; max-height: 320px;
+    }
+    .participant-row {
+      display: grid; grid-template-columns: 1fr 1.3fr 110px;
+      gap: 10px; padding: 11px 13px;
+      border-bottom: 1px solid #efede6;
+      font-size: 11px; align-items: center;
+    }
+    .participant-row:last-child { border-bottom: 0; }
+    .participant-row.head {
+      position: sticky; top: 0; background: #f3f0e9;
+      color: #667066; text-transform: uppercase;
+      font-size: 9px; font-weight: 700; letter-spacing: 0.07em;
+    }
+    .participant-name { font-weight: 700; color: #3d453f; }
+    .participant-email { color: #6b736c; overflow-wrap: anywhere; }
+    .participant-state { text-align: center; }
+    .results-table {
+      border: 1px solid var(--line); border-radius: 12px;
+      overflow: auto; max-height: 280px; margin-top: 10px;
+    }
+    .result-row {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px; padding: 10px 13px;
+      border-bottom: 1px solid #efede6; font-size: 12px;
+    }
+    .result-row:last-child { border-bottom: 0; }
+    .result-row.head {
+      position: sticky; top: 0; background: #f3f0e9;
+      color: #667066; text-transform: uppercase;
+      font-size: 9px; font-weight: 700; letter-spacing: 0.07em;
+    }
+    .notice { font-size: 11px; color: #8a918a; line-height: 1.6; margin-top: 12px; }
+    footer {
+      text-align: center; padding: 0 20px 32px;
+      color: #879189; font-size: 11px;
+    }
+    footer strong { color: var(--crimson); }
+    .hidden { display: none !important; }
+    #snow {
+      position: fixed; inset: 0; pointer-events: none;
+      overflow: hidden; z-index: 5;
+    }
+    .snowflake {
+      position: absolute; top: -25px; color: #d4d0c8; opacity: 0.5;
+      animation: snowfall linear infinite;
+      text-shadow: 0 1px 3px rgba(255, 255, 255, 0.6);
+    }
+    @keyframes snowfall {
+      to { transform: translate3d(20px, 110vh, 0) rotate(240deg); }
+    }
+    .toast {
+      position: fixed; bottom: 20px; left: 50%;
+      transform: translate(-50%, 20px);
+      background: var(--crimson-deep); color: #fff8f0;
+      padding: 12px 18px; border-radius: 10px; font-size: 12px;
+      box-shadow: var(--shadow); opacity: 0;
+      pointer-events: none; transition: 0.25s; z-index: 10;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    @media (max-width: 700px) {
+      .hero-inner { padding: 44px 18px 48px; }
+      .main { padding: 0 12px; }
+      .content { padding: 20px 16px; }
+      .form-grid, .admin-grid { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+      .topbar-inner { padding: 12px 16px; }
+      .top-date { font-size: 10px; }
+      .nav { padding: 10px; gap: 4px; }
+      .nav button { flex: 1; padding: 9px 6px; font-size: 11px; }
+      .participant-row { grid-template-columns: 1fr 1fr 70px; padding: 10px 8px; font-size: 10px; }
+      .result-row { grid-template-columns: 1fr 1fr; font-size: 11px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="page-bg"></div>
   <div id="snow" aria-hidden="true"></div>
+
   <header class="topbar">
     <div class="topbar-inner">
-      <div class="brand"><span class="brand-mark">✦</span><span>CHOCOMIGO</span></div>
-      <div class="top-date">🎄 Edição de Natal · <span id="headerDate">12/12/2026 19:30</span></div>
+      <div class="brand"><span class="brand-mark">C</span><span>CHOCOMIGO</span></div>
+      <div class="top-date">Edicao de Natal · <span id="headerDate">12/12/2026 19:30</span></div>
     </div>
   </header>
 
   <section class="hero">
     <div class="hero-inner">
-      <div class="eyebrow">Uma tradição para partilhar</div>
+      <div class="eyebrow" id="heroEyebrow">Uma tradicao para partilhar</div>
       <h1 id="siteTitle">CHOCOMIGO</h1>
-      <p class="hero-copy">O Natal fica melhor quando há surpresas, carinho e um presente escolhido a pensar em alguém. Inscreve-te e participa no nosso Amigo Secreto.</p>
+      <p class="hero-copy" id="heroCopy">O Natal fica melhor quando ha surpresas, carinho e um presente escolhido a pensar em alguem. Inscreve-te e participa no nosso Amigo Secreto.</p>
       <div class="hero-meta">
-        <span class="meta-pill">📅 <span id="eventDateDisplay">12/12/2026 19:30</span></span>
-        <span class="meta-pill">🎁 Orçamento: <strong id="budgetDisplay">20 €</strong></span>
+        <span class="meta-pill"><span id="eventDateDisplay">12/12/2026 19:30</span></span>
+        <span class="meta-pill">Orcamento: <strong id="budgetDisplay">20 €</strong></span>
       </div>
     </div>
   </section>
 
   <main class="main">
     <div class="shell">
-      <nav class="nav" aria-label="Navegação principal">
-        <button id="tabRegister" class="active" type="button" onclick="switchTab('register')">🎄 Inscrição</button>
-        <button id="tabPortal" type="button" onclick="switchTab('portal')">🎁 Área do participante</button>
-        <button id="tabAdmin" type="button" class="hidden" style="display:none" onclick="switchTab('admin')">⚙ Administração</button>
+      <nav class="nav" aria-label="Navegacao principal">
+        <button id="tabRegister" class="active" type="button" onclick="switchTab('register')">Inscricao</button>
+        <button id="tabPortal" type="button" onclick="switchTab('portal')">Area do participante</button>
+        <button id="tabAdmin" type="button" onclick="switchTab('admin')">Administracao</button>
       </nav>
 
+      <!-- INSCRICAO -->
       <section id="viewRegister" class="content">
         <div class="section-head">
           <div class="section-kicker">Participa na troca de presentes</div>
-          <h2>Entra na brincadeira.</h2>
-          <p class="sub">Preenche os teus dados e deixa algumas pistas sobre o presente que gostarias de receber.</p>
-          <span id="phaseBadge" class="status open"><span class="status-dot"></span> A verificar inscrições…</span>
+          <h2 id="registerTitle">Entra na brincadeira.</h2>
+          <p class="sub" id="registerSub">Preenche os teus dados e deixa algumas pistas sobre o presente que gostarias de receber.</p>
+          <span id="phaseBadge" class="status open"><span class="status-dot"></span> A verificar inscricoes…</span>
         </div>
 
         <div id="countdownSection" class="countdown-wrap">
-          <div class="countdown-title">Tempo restante para o fim das inscrições</div>
+          <div class="countdown-title">Tempo restante para o fim das inscricoes</div>
           <div class="countdown">
             <div class="time-box"><span class="time-value" id="days">00</span><span class="time-label">Dias</span></div>
             <div class="time-box"><span class="time-value" id="hours">00</span><span class="time-label">Horas</span></div>
             <div class="time-box"><span class="time-value" id="minutes">00</span><span class="time-label">Minutos</span></div>
             <div class="time-box"><span class="time-value" id="seconds">00</span><span class="time-label">Segundos</span></div>
           </div>
-          <p class="hint" style="text-align:center;margin:12px 0 0">Inscrições até <strong id="deadlineText">28/11/2026</strong>.</p>
+          <p class="hint" style="text-align:center;margin:12px 0 0">Inscricoes ate <strong id="deadlineText">28/11/2026</strong>.</p>
         </div>
 
         <form id="registerForm" onsubmit="register(event)">
@@ -168,60 +419,70 @@
               <input id="regEmail" name="email" type="email" placeholder="nome@exemplo.com" autocomplete="email" required maxlength="160">
             </div>
             <div class="field full">
-              <label for="regWishlist">Lista de desejos e sugestões</label>
-              <textarea id="regWishlist" name="wishlist" placeholder="Indica gostos, interesses, cores, sugestões ou algo que prefiras evitar…" maxlength="1200"></textarea>
+              <label for="regWishlist">Lista de desejos e sugestoes</label>
+              <textarea id="regWishlist" name="wishlist" placeholder="Indica gostos, interesses, cores, sugestoes ou algo que prefiras evitar…" maxlength="1200"></textarea>
               <span class="hint">Partilha algumas ideias para ajudar o teu Amigo Secreto a escolher.</span>
             </div>
             <div class="field full">
-              <label for="regLink">Link de referência <span style="font-weight:400;color:#8a958e">(opcional)</span></label>
+              <label for="regLink">Link de referencia <span style="font-weight:400;color:#8a918a">(opcional)</span></label>
               <input id="regLink" name="link" type="url" placeholder="https://…">
               <span class="hint">Podes inserir um link de um produto ou exemplo de presente.</span>
             </div>
           </div>
-          <div class="form-actions"><button class="btn btn-primary" type="submit">Confirmar inscrição <span aria-hidden="true">→</span></button></div>
+          <div class="form-actions">
+            <button class="btn btn-primary" type="submit">Confirmar inscricao</button>
+          </div>
         </form>
 
         <div id="registrationClosed" class="closed-box hidden">
-          <div class="closed-icon">🔒</div>
-          <h3>As inscrições estão encerradas</h3>
-          <p>O período de inscrição terminou. Acede à área do participante para consultar o estado do sorteio, quando estiver disponível.</p>
-          <button class="btn btn-primary" style="margin-top:17px" type="button" onclick="switchTab('portal')">Aceder à minha área</button>
+          <h3>As inscricoes estao encerradas</h3>
+          <p>O periodo de inscricao terminou. Acede a area do participante para consultar o estado do sorteio, quando estiver disponivel.</p>
+          <button class="btn btn-primary" style="margin-top:16px" type="button" onclick="switchTab('portal')">Aceder a minha area</button>
         </div>
       </section>
 
+      <!-- PORTAL PARTICIPANTE -->
       <section id="viewPortal" class="content hidden">
         <div class="section-head">
-          <div class="section-kicker">A tua área pessoal</div>
-          <h2>Consulta a tua participação.</h2>
-          <p class="sub">Valida o teu e-mail através do código que receberás para aceder à informação do sorteio.</p>
+          <div class="section-kicker">A tua area pessoal</div>
+          <h2>Consulta a tua participacao.</h2>
+          <p class="sub">Valida o teu e-mail atraves do codigo que receberas para aceder a informacao do sorteio.</p>
         </div>
         <div class="portal-card">
           <div id="loginSection" class="step">
             <div id="stepEmail">
-              <h3>Entrar na área do participante</h3>
-              <p>Introduz o mesmo endereço de e-mail que usaste no momento da inscrição.</p>
+              <h3>Entrar na area do participante</h3>
+              <p>Introduz o mesmo endereco de e-mail que usaste no momento da inscricao.</p>
               <form onsubmit="requestOtp(event)">
-                <div class="field"><label for="loginEmail">Endereço de e-mail</label><input id="loginEmail" type="email" autocomplete="email" placeholder="nome@exemplo.com" required></div>
-                <button class="btn btn-primary" type="submit">Enviar código de acesso</button>
+                <div class="field">
+                  <label for="loginEmail">Endereco de e-mail</label>
+                  <input id="loginEmail" type="email" autocomplete="email" placeholder="nome@exemplo.com" required>
+                </div>
+                <button class="btn btn-primary" type="submit">Enviar codigo de acesso</button>
               </form>
             </div>
             <div id="stepCode" class="hidden">
               <h3>Confirma o teu acesso</h3>
-              <p id="codeSentText">Enviámos um código para o teu e-mail.</p>
+              <p id="codeSentText">Enviamos um codigo para o teu e-mail.</p>
               <form onsubmit="verifyOtp(event)">
-                <div class="field"><label for="loginCode">Código de verificação</label><input id="loginCode" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="Introduz o código recebido" required maxlength="12"></div>
-                <button class="btn btn-primary" type="submit">Validar código</button>
+                <div class="field">
+                  <label for="loginCode">Codigo de verificacao</label>
+                  <input id="loginCode" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="Introduz o codigo recebido" required maxlength="12">
+                </div>
+                <button class="btn btn-primary" type="submit">Validar codigo</button>
               </form>
             </div>
           </div>
 
           <div id="stepDashboard" class="hidden">
             <div class="step" style="text-align:center">
-              <h3 id="welcomeName">Olá!</h3>
-              <p>O teu acesso foi validado. Consulta o resultado do sorteio nesta área.</p>
-              <div id="giftContainer"><button class="btn btn-gold" type="button" onclick="openGift()">🎁 Consultar o meu Amigo Secreto</button></div>
+              <h3 id="welcomeName">Ola!</h3>
+              <p>O teu acesso foi validado. Consulta o resultado do sorteio nesta area.</p>
+              <div id="giftContainer">
+                <button class="btn btn-gold" type="button" onclick="openGift()">Consultar o meu Amigo Secreto</button>
+              </div>
               <div id="giftResult" class="gift-card hidden">
-                <div class="small">A pessoa a quem vais oferecer um presente é</div>
+                <div class="small">A pessoa a quem vais oferecer um presente e</div>
                 <h3 id="assignedName"></h3>
                 <div id="targetWishlist" class="wishlist"></div>
               </div>
@@ -230,175 +491,612 @@
         </div>
       </section>
 
+      <!-- ADMINISTRACAO -->
       <section id="viewAdmin" class="content hidden">
         <div class="section-head">
-          <div class="section-kicker">Gestão do evento</div>
-          <h2>Painel de administração.</h2>
-          <p class="sub">Configura o evento, acompanha as inscrições e gere o sorteio.</p>
-          <span id="adminStatusBadge" class="admin-status">A carregar estado…</span>
+          <div class="section-kicker">Gestao do evento</div>
+          <h2>Painel de administracao.</h2>
+          <p class="sub">Autentica-te para gerir o evento, participantes e sorteio.</p>
         </div>
-        <div class="admin-grid">
-          <div class="admin-card">
-            <h3>Configurações do evento</h3>
-            <div class="field"><label for="cfgName">Nome do evento</label><input id="cfgName" type="text" value="Chocomigo"></div>
-            <div class="field"><label for="cfgEventDate">Data e hora</label><input id="cfgEventDate" type="text" value="12/12/2026 19:30"></div>
-            <div class="field"><label for="cfgBudget">Orçamento (€)</label><input id="cfgBudget" type="number" min="0" step="0.01" value="20"></div>
-            <div class="field"><label for="cfgDeadline">Fim das inscrições</label><input id="cfgDeadline" type="date" value="2026-11-28"></div>
-            <button class="btn btn-primary" type="button" onclick="saveConfig()">Guardar configurações</button>
-          </div>
-          <div class="admin-card">
-            <h3>Controlos do sorteio</h3>
-            <p class="sub" style="margin-bottom:16px">As ações de sorteio e reposição alteram o estado do evento para todos os participantes.</p>
-            <div class="admin-actions">
-              <button class="btn btn-soft" type="button" onclick="setStatus('open')">Abrir inscrições</button>
-              <button class="btn btn-soft" type="button" onclick="setStatus('closed')">Fechar inscrições</button>
-              <button class="btn btn-gold" type="button" onclick="triggerDraw()">Executar sorteio</button>
-              <button class="btn btn-danger" type="button" onclick="resetEvent()">Repor evento</button>
+
+        <!-- Login Admin -->
+        <div id="adminLoginBox" class="admin-login">
+          <h3>Acesso de administrador</h3>
+          <p>Introduz as credenciais de gestao do evento.</p>
+          <form onsubmit="adminLogin(event)">
+            <div class="field">
+              <label for="adminUser">Utilizador</label>
+              <input id="adminUser" type="text" autocomplete="username" placeholder="Admin" required>
             </div>
-            <p class="notice">A reposição pode apagar os resultados existentes. Confirma sempre a operação antes de avançar.</p>
-          </div>
-          <div class="admin-card" style="grid-column:1/-1">
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px">
-              <h3 style="margin:0">Participantes inscritos</h3>
-              <button class="btn btn-soft" type="button" onclick="loadParticipants()">Atualizar lista</button>
+            <div class="field">
+              <label for="adminPass">Password</label>
+              <input id="adminPass" type="password" autocomplete="current-password" placeholder="••••••••" required>
             </div>
-            <div id="participantsList" class="participants"><div style="padding:20px;text-align:center;color:#879189;font-size:12px">A carregar participantes…</div></div>
-            <p class="notice">Estado: lista de desejos preenchida e resultado consultado.</p>
+            <div class="form-actions" style="justify-content:center;margin-top:16px">
+              <button class="btn btn-primary" type="submit">Entrar</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Painel Admin (apos login) -->
+        <div id="adminPanel" class="hidden">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:18px">
+            <span id="adminStatusBadge" class="admin-status">A carregar estado…</span>
+            <button class="btn btn-soft" type="button" onclick="adminLogout()">Terminar sessao</button>
+          </div>
+
+          <div class="admin-grid">
+            <!-- Configuracoes -->
+            <div class="admin-card">
+              <h3>Configuracoes do evento</h3>
+              <div class="field">
+                <label for="cfgName">Nome do evento</label>
+                <input id="cfgName" type="text" value="Chocomigo">
+              </div>
+              <div class="field">
+                <label for="cfgEyebrow">Texto superior (eyebrow)</label>
+                <input id="cfgEyebrow" type="text" value="Uma tradicao para partilhar">
+              </div>
+              <div class="field">
+                <label for="cfgHeroCopy">Texto principal do hero</label>
+                <textarea id="cfgHeroCopy" rows="3">O Natal fica melhor quando ha surpresas, carinho e um presente escolhido a pensar em alguem. Inscreve-te e participa no nosso Amigo Secreto.</textarea>
+              </div>
+              <div class="field">
+                <label for="cfgRegisterTitle">Titulo da inscricao</label>
+                <input id="cfgRegisterTitle" type="text" value="Entra na brincadeira.">
+              </div>
+              <div class="field">
+                <label for="cfgRegisterSub">Subtitulo da inscricao</label>
+                <input id="cfgRegisterSub" type="text" value="Preenche os teus dados e deixa algumas pistas sobre o presente que gostarias de receber.">
+              </div>
+              <div class="field">
+                <label for="cfgEventDate">Data e hora do evento</label>
+                <input id="cfgEventDate" type="text" value="12/12/2026 19:30">
+              </div>
+              <div class="field">
+                <label for="cfgBudget">Orcamento (€)</label>
+                <input id="cfgBudget" type="number" min="0" step="0.01" value="20">
+              </div>
+              <div class="field">
+                <label for="cfgDeadline">Fim das inscricoes</label>
+                <input id="cfgDeadline" type="date" value="2026-11-28">
+              </div>
+              <button class="btn btn-primary" type="button" onclick="saveConfig()">Guardar configuracoes</button>
+            </div>
+
+            <!-- Controlos do sorteio -->
+            <div class="admin-card">
+              <h3>Controlos do sorteio</h3>
+              <p class="sub" style="margin-bottom:14px">As acoes de sorteio e reposicao alteram o estado do evento para todos os participantes.</p>
+              <div class="admin-actions">
+                <button class="btn btn-soft" type="button" onclick="setStatus('open')">Abrir inscricoes</button>
+                <button class="btn btn-soft" type="button" onclick="setStatus('closed')">Fechar inscricoes</button>
+                <button class="btn btn-gold" type="button" onclick="triggerDraw()">Executar sorteio</button>
+                <button class="btn btn-danger" type="button" onclick="resetEvent()">Repor evento</button>
+              </div>
+              <p class="notice">A reposicao apaga os resultados existentes e reabre as inscricoes. Confirma sempre antes de avancar.</p>
+            </div>
+
+            <!-- Participantes -->
+            <div class="admin-card" style="grid-column:1/-1">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px">
+                <h3 style="margin:0">Participantes inscritos</h3>
+                <button class="btn btn-soft" type="button" onclick="loadParticipants()">Atualizar lista</button>
+              </div>
+              <div id="participantsList" class="participants">
+                <div style="padding:18px;text-align:center;color:#879189;font-size:12px">A carregar participantes…</div>
+              </div>
+              <p class="notice">Estado: lista de desejos preenchida e resultado consultado.</p>
+            </div>
+
+            <!-- Resultados do sorteio -->
+            <div class="admin-card" style="grid-column:1/-1">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px">
+                <h3 style="margin:0">Resultados do sorteio (quem tirou quem)</h3>
+                <button class="btn btn-soft" type="button" onclick="loadDrawResults()">Atualizar resultados</button>
+              </div>
+              <div id="drawResultsList" class="results-table">
+                <div style="padding:18px;text-align:center;color:#879189;font-size:12px">A carregar resultados…</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
     </div>
   </main>
 
-  <footer>Feito para partilhar o espírito de Natal. <strong>Chocomigo</strong> · <span id="footerDate">12/12/2026 19:30</span></footer>
+  <footer>Feito para partilhar o espirito de Natal. <strong>Chocomigo</strong> · <span id="footerDate">12/12/2026 19:30</span></footer>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script>
     "use strict";
     const API = "https://script.google.com/macros/s/AKfycbyYz3ln24RS22cXQK2zh4bH2dJJVmPcBA6THyfKTdsZme0vZOu65e9UQjen5rLPCYH2/exec";
-    let currentId = null, email = "", clickCount = 0, clickResetTimer = null;
-    let deadline = new Date("2026-11-28T23:59:59"), eventDate = "12/12/2026 19:30", budget = "20", status = "open";
+    const ADMIN_USER = "Admin";
+    const ADMIN_PASS = "654321a*";
+
+    let currentId = null;
+    let email = "";
+    let adminAuthenticated = false;
+    let deadline = new Date("2026-11-28T23:59:59");
+    let eventDate = "12/12/2026 19:30";
+    let budget = "20";
+    let status = "open";
+
     const $ = id => document.getElementById(id);
     const safeText = value => String(value ?? "");
-    function notify(message){const toast=$("toast");toast.textContent=message;toast.classList.add("show");clearTimeout(notify.timer);notify.timer=setTimeout(()=>toast.classList.remove("show"),3200)}
-    async function apiRequest(url, options={}){
-      const response=await fetch(url,options);
-      if(!response.ok) throw new Error(`Erro HTTP ${response.status}`);
+
+    function notify(message) {
+      const toast = $("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(notify.timer);
+      notify.timer = setTimeout(() => toast.classList.remove("show"), 3200);
+    }
+
+    async function apiRequest(url, options = {}) {
+      const response = await fetch(url, options);
+      if (!response.ok) throw new Error("Erro HTTP " + response.status);
       return response.json();
     }
-    function post(payload){return apiRequest(API,{method:"POST",body:JSON.stringify(payload)});}
-    function isOpen(){return status!=="drawn" && status!=="closed" && new Date()<=deadline;}
-    function setText(id,value){const el=$(id);if(el)el.textContent=safeText(value)}
-    async function loadConfig(){
-      try{
-        const d=await apiRequest(`${API}?action=getConfig`);
-        if(d.registration_deadline){const parsed=new Date(`${d.registration_deadline}T23:59:59`);if(!Number.isNaN(parsed.getTime()))deadline=parsed}
-        eventDate=d.event_date||"12/12/2026 19:30";budget=d.budget_limit||"20";status=d.status||"open";
-        setText("siteTitle",(d.event_name||"Chocomigo").toUpperCase());setText("headerDate",eventDate);setText("footerDate",eventDate);setText("eventDateDisplay",eventDate);setText("budgetDisplay",`${budget} €`);setText("deadlineText",deadline.toLocaleDateString("pt-PT"));
-        $("cfgName").value=d.event_name||"Chocomigo";$("cfgEventDate").value=eventDate;$("cfgBudget").value=budget;$("cfgDeadline").value=d.registration_deadline||"2026-11-28";
-        updateUI();updateCountdown();
-      }catch(error){console.error("Erro ao carregar configurações:",error);notify("Não foi possível carregar as configurações do evento.")}
+
+    function post(payload) {
+      return apiRequest(API, {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
     }
-    async function saveConfig(){
-      const payload={action:"updateConfig",event_name:$("cfgName").value.trim(),event_date:$("cfgEventDate").value.trim(),budget_limit:$("cfgBudget").value,registration_deadline:$("cfgDeadline").value};
-      if(!payload.event_name||!payload.event_date||!payload.registration_deadline){notify("Preenche todos os campos das configurações.");return}
-      try{const d=await post(payload);if(d.success){notify("Configurações guardadas.");await loadConfig()}else notify(d.error||"Não foi possível guardar as configurações.")}
-      catch(error){console.error(error);notify("Erro de comunicação com o servidor.")}
+
+    function isOpen() {
+      return status !== "drawn" && status !== "closed" && new Date() <= deadline;
     }
-    function updateUI(){
-      const badge=$("phaseBadge"),form=$("registerForm"),closed=$("registrationClosed"),countdown=$("countdownSection"),login=$("loginSection");
-      const open=isOpen();
-      if(status==="drawn"){form.classList.add("hidden");closed.classList.remove("hidden");countdown.classList.add("hidden");login.classList.remove("hidden");badge.className="status closed";badge.innerHTML='<span class="status-dot"></span> Sorteio realizado';setText("adminStatusBadge","SORTEIO REALIZADO")}
-      else if(open){form.classList.remove("hidden");closed.classList.add("hidden");countdown.classList.remove("hidden");login.classList.add("hidden");badge.className="status open";badge.innerHTML='<span class="status-dot"></span> Inscrições abertas';setText("adminStatusBadge","INSCRIÇÕES ABERTAS")}
-      else{form.classList.add("hidden");closed.classList.remove("hidden");countdown.classList.add("hidden");login.classList.remove("hidden");badge.className="status closed";badge.innerHTML='<span class="status-dot"></span> Inscrições encerradas';setText("adminStatusBadge","INSCRIÇÕES ENCERRADAS")}
+
+    function setText(id, value) {
+      const el = $(id);
+      if (el) el.textContent = safeText(value);
     }
-    function updateCountdown(){
-      const distance=deadline-new Date();
-      if(distance<=0){["days","hours","minutes","seconds"].forEach(id=>setText(id,"00"));if(status==="open")updateUI();return}
-      setText("days",String(Math.floor(distance/86400000)).padStart(2,"0"));
-      setText("hours",String(Math.floor(distance%86400000/3600000)).padStart(2,"0"));
-      setText("minutes",String(Math.floor(distance%3600000/60000)).padStart(2,"0"));
-      setText("seconds",String(Math.floor(distance%60000/1000)).padStart(2,"0"));
+
+    function setValue(id, value) {
+      const el = $(id);
+      if (el) el.value = safeText(value);
     }
-    async function setStatus(nextStatus){
-      try{const d=await post({action:"updateConfig",status:nextStatus});if(d.success){notify("Estado do evento atualizado.");await loadConfig()}else notify(d.error||"Não foi possível atualizar o estado.")}
-      catch(error){console.error(error);notify("Erro de comunicação com o servidor.")}
+
+    // ---------- CONFIG ----------
+    async function loadConfig() {
+      try {
+        const d = await apiRequest(API + "?action=getConfig");
+        if (d.registration_deadline) {
+          const parsed = new Date(d.registration_deadline + "T23:59:59");
+          if (!Number.isNaN(parsed.getTime())) deadline = parsed;
+        }
+        eventDate = d.event_date || "12/12/2026 19:30";
+        budget = d.budget_limit || "20";
+        status = d.status || "open";
+
+        const eventName = (d.event_name || "Chocomigo").toUpperCase();
+        setText("siteTitle", eventName);
+        setText("headerDate", eventDate);
+        setText("footerDate", eventDate);
+        setText("eventDateDisplay", eventDate);
+        setText("budgetDisplay", budget + " €");
+        setText("deadlineText", deadline.toLocaleDateString("pt-PT"));
+
+        if (d.hero_eyebrow) setText("heroEyebrow", d.hero_eyebrow);
+        if (d.hero_copy) setText("heroCopy", d.hero_copy);
+        if (d.register_title) setText("registerTitle", d.register_title);
+        if (d.register_sub) setText("registerSub", d.register_sub);
+
+        setValue("cfgName", d.event_name || "Chocomigo");
+        setValue("cfgEventDate", eventDate);
+        setValue("cfgBudget", budget);
+        setValue("cfgDeadline", d.registration_deadline || "2026-11-28");
+        setValue("cfgEyebrow", d.hero_eyebrow || "Uma tradicao para partilhar");
+        setValue("cfgHeroCopy", d.hero_copy || "O Natal fica melhor quando ha surpresas, carinho e um presente escolhido a pensar em alguem. Inscreve-te e participa no nosso Amigo Secreto.");
+        setValue("cfgRegisterTitle", d.register_title || "Entra na brincadeira.");
+        setValue("cfgRegisterSub", d.register_sub || "Preenche os teus dados e deixa algumas pistas sobre o presente que gostarias de receber.");
+
+        updateUI();
+        updateCountdown();
+      } catch (error) {
+        console.error("Erro ao carregar configuracoes:", error);
+        notify("Nao foi possivel carregar as configuracoes do evento.");
+      }
     }
-    async function resetEvent(){
-      if(!confirm("Esta operação vai repor o evento, apagar o sorteio e reabrir as inscrições. Queres continuar?"))return;
-      try{const d=await post({action:"resetEvent"});if(d.success){notify(d.message||"Evento reposto.");await loadConfig();await loadParticipants()}else notify(d.error||"Não foi possível repor o evento.")}
-      catch(error){console.error(error);notify("Erro ao repor o evento.")}
+
+    async function saveConfig() {
+      const payload = {
+        action: "updateConfig",
+        event_name: $("cfgName").value.trim(),
+        event_date: $("cfgEventDate").value.trim(),
+        budget_limit: $("cfgBudget").value,
+        registration_deadline: $("cfgDeadline").value,
+        hero_eyebrow: $("cfgEyebrow").value.trim(),
+        hero_copy: $("cfgHeroCopy").value.trim(),
+        register_title: $("cfgRegisterTitle").value.trim(),
+        register_sub: $("cfgRegisterSub").value.trim()
+      };
+      if (!payload.event_name || !payload.event_date || !payload.registration_deadline) {
+        notify("Preenche todos os campos obrigatorios das configuracoes.");
+        return;
+      }
+      try {
+        const d = await post(payload);
+        if (d.success) {
+          notify("Configuracoes guardadas.");
+          await loadConfig();
+        } else {
+          notify(d.error || "Nao foi possivel guardar as configuracoes.");
+        }
+      } catch (error) {
+        console.error(error);
+        notify("Erro de comunicacao com o servidor.");
+      }
     }
-    async function triggerDraw(){
-      if(!confirm("Queres executar o sorteio agora? Confirma que todas as inscrições estão concluídas."))return;
-      try{const d=await post({action:"executeDraw"});if(d.success){notify(d.message||"Sorteio realizado.");await loadConfig();await loadParticipants()}else notify(d.error||"Erro ao realizar o sorteio.")}
-      catch(error){console.error(error);notify("Erro de comunicação ao executar o sorteio.")}
+
+    function updateUI() {
+      const badge = $("phaseBadge");
+      const form = $("registerForm");
+      const closed = $("registrationClosed");
+      const countdown = $("countdownSection");
+      const open = isOpen();
+
+      if (status === "drawn") {
+        form.classList.add("hidden");
+        closed.classList.remove("hidden");
+        countdown.classList.add("hidden");
+        badge.className = "status closed";
+        badge.innerHTML = '<span class="status-dot"></span> Sorteio realizado';
+        setText("adminStatusBadge", "SORTEIO REALIZADO");
+      } else if (open) {
+        form.classList.remove("hidden");
+        closed.classList.add("hidden");
+        countdown.classList.remove("hidden");
+        badge.className = "status open";
+        badge.innerHTML = '<span class="status-dot"></span> Inscricoes abertas';
+        setText("adminStatusBadge", "INSCRICOES ABERTAS");
+      } else {
+        form.classList.add("hidden");
+        closed.classList.remove("hidden");
+        countdown.classList.add("hidden");
+        badge.className = "status closed";
+        badge.innerHTML = '<span class="status-dot"></span> Inscricoes encerradas';
+        setText("adminStatusBadge", "INSCRICOES ENCERRADAS");
+      }
     }
-    function addCell(row,text,className=""){
-      const cell=document.createElement("div");cell.className=className;cell.textContent=safeText(text);row.appendChild(cell);
+
+    function updateCountdown() {
+      const distance = deadline - new Date();
+      if (distance <= 0) {
+        ["days", "hours", "minutes", "seconds"].forEach(id => setText(id, "00"));
+        if (status === "open") updateUI();
+        return;
+      }
+      setText("days", String(Math.floor(distance / 86400000)).padStart(2, "0"));
+      setText("hours", String(Math.floor((distance % 86400000) / 3600000)).padStart(2, "0"));
+      setText("minutes", String(Math.floor((distance % 3600000) / 60000)).padStart(2, "0"));
+      setText("seconds", String(Math.floor((distance % 60000) / 1000)).padStart(2, "0"));
     }
-    async function loadParticipants(){
-      const box=$("participantsList");if(!box)return;
-      box.textContent="A carregar participantes…";
-      try{
-        const list=await apiRequest(`${API}?action=getParticipants`);box.replaceChildren();
-        if(!Array.isArray(list)||list.length===0){box.textContent="Ainda não existem participantes inscritos.";return}
-        const header=document.createElement("div");header.className="participant-row head";
-        ["Nome","E-mail","Estado"].forEach(value=>addCell(header,value));box.appendChild(header);
-        list.forEach(person=>{
-          const row=document.createElement("div");row.className="participant-row";
-          addCell(row,person.name||"Sem nome","participant-name");addCell(row,person.email||"Sem e-mail","participant-email");
-          addCell(row,`${person.wishlist_completed?"✓":"○"} Lista · ${person.result_viewed?"✓":"○"} Resultado`,"participant-state");box.appendChild(row);
+
+    // ---------- ADMIN AUTH ----------
+    function adminLogin(event) {
+      event.preventDefault();
+      const user = $("adminUser").value.trim();
+      const pass = $("adminPass").value;
+      if (user === ADMIN_USER && pass === ADMIN_PASS) {
+        adminAuthenticated = true;
+        sessionStorage.setItem("chocomigo_admin", "1");
+        $("adminLoginBox").classList.add("hidden");
+        $("adminPanel").classList.remove("hidden");
+        loadParticipants();
+        loadDrawResults();
+        notify("Sessao de administrador iniciada.");
+      } else {
+        notify("Utilizador ou password incorretos.");
+      }
+    }
+
+    function adminLogout() {
+      adminAuthenticated = false;
+      sessionStorage.removeItem("chocomigo_admin");
+      $("adminPanel").classList.add("hidden");
+      $("adminLoginBox").classList.remove("hidden");
+      $("adminUser").value = "";
+      $("adminPass").value = "";
+      notify("Sessao terminada.");
+    }
+
+    function checkAdminSession() {
+      if (sessionStorage.getItem("chocomigo_admin") === "1") {
+        adminAuthenticated = true;
+        $("adminLoginBox").classList.add("hidden");
+        $("adminPanel").classList.remove("hidden");
+      }
+    }
+
+    // ---------- STATUS / DRAW ----------
+    async function setStatus(nextStatus) {
+      try {
+        const d = await post({ action: "updateConfig", status: nextStatus });
+        if (d.success) {
+          notify("Estado do evento atualizado.");
+          await loadConfig();
+        } else {
+          notify(d.error || "Nao foi possivel atualizar o estado.");
+        }
+      } catch (error) {
+        console.error(error);
+        notify("Erro de comunicacao com o servidor.");
+      }
+    }
+
+    async function resetEvent() {
+      if (!confirm("Esta operacao vai repor o evento, apagar o sorteio e reabrir as inscricoes. Queres continuar?")) return;
+      try {
+        const d = await post({ action: "resetEvent" });
+        if (d.success) {
+          notify(d.message || "Evento reposto.");
+          await loadConfig();
+          await loadParticipants();
+          await loadDrawResults();
+        } else {
+          notify(d.error || "Nao foi possivel repor o evento.");
+        }
+      } catch (error) {
+        console.error(error);
+        notify("Erro ao repor o evento.");
+      }
+    }
+
+    async function triggerDraw() {
+      if (!confirm("Queres executar o sorteio agora? Confirma que todas as inscricoes estao concluidas.")) return;
+      try {
+        const d = await post({ action: "executeDraw" });
+        if (d.success) {
+          notify(d.message || "Sorteio realizado.");
+          await loadConfig();
+          await loadParticipants();
+          await loadDrawResults();
+        } else {
+          notify(d.error || "Erro ao realizar o sorteio.");
+        }
+      } catch (error) {
+        console.error(error);
+        notify("Erro de comunicacao ao executar o sorteio.");
+      }
+    }
+
+    // ---------- PARTICIPANTS ----------
+    function addCell(row, text, className = "") {
+      const cell = document.createElement("div");
+      cell.className = className;
+      cell.textContent = safeText(text);
+      row.appendChild(cell);
+    }
+
+    async function loadParticipants() {
+      const box = $("participantsList");
+      if (!box) return;
+      box.textContent = "A carregar participantes…";
+      try {
+        const list = await apiRequest(API + "?action=getParticipants");
+        box.replaceChildren();
+        if (!Array.isArray(list) || list.length === 0) {
+          box.textContent = "Ainda nao existem participantes inscritos.";
+          return;
+        }
+        const header = document.createElement("div");
+        header.className = "participant-row head";
+        ["Nome", "E-mail", "Estado"].forEach(value => addCell(header, value));
+        box.appendChild(header);
+
+        list.forEach(person => {
+          const row = document.createElement("div");
+          row.className = "participant-row";
+          addCell(row, person.name || "Sem nome", "participant-name");
+          addCell(row, person.email || "Sem e-mail", "participant-email");
+          const state = (person.wishlist_completed ? "Lista " : "Sem lista ") +
+                        (person.result_viewed ? "· Visto" : "· Nao visto");
+          addCell(row, state, "participant-state");
+          box.appendChild(row);
         });
-      }catch(error){console.error(error);box.textContent="Não foi possível carregar a lista de participantes."}
+      } catch (error) {
+        console.error(error);
+        box.textContent = "Nao foi possivel carregar a lista de participantes.";
+      }
     }
-    async function register(event){
-      event.preventDefault();if(!isOpen()){notify("As inscrições estão encerradas.");updateUI();return}
-      const name=$("regName").value.trim(),address=$("regEmail").value.trim(),link=$("regLink").value.trim();
-      if(link){try{const parsed=new URL(link);if(!["http:","https:"].includes(parsed.protocol))throw new Error()}catch{notify("Insere um link válido, iniciado por https://");return}}
-      try{
-        const d=await post({action:"registerSelf",name,email:address,description:$("regWishlist").value.trim(),reference_link:link});
-        if(d.success){notify("Inscrição concluída com sucesso.");event.target.reset();switchTab("portal");$("loginEmail").value=address}
-        else notify(d.error||"Não foi possível concluir a inscrição.");
-      }catch(error){console.error(error);notify("Erro de comunicação durante a inscrição.")}
+
+    async function loadDrawResults() {
+      const box = $("drawResultsList");
+      if (!box) return;
+      box.textContent = "A carregar resultados…";
+      try {
+        const list = await apiRequest(API + "?action=getDrawResults");
+        box.replaceChildren();
+        if (!Array.isArray(list) || list.length === 0) {
+          box.textContent = "Ainda nao existe sorteio realizado.";
+          return;
+        }
+        const header = document.createElement("div");
+        header.className = "result-row head";
+        addCell(header, "Quem oferece");
+        addCell(header, "Quem recebe");
+        box.appendChild(header);
+
+        list.forEach(pair => {
+          const row = document.createElement("div");
+          row.className = "result-row";
+          addCell(row, pair.giver || "—");
+          addCell(row, pair.receiver || "—");
+          box.appendChild(row);
+        });
+      } catch (error) {
+        console.error(error);
+        box.textContent = "Nao foi possivel carregar os resultados do sorteio.";
+      }
     }
-    async function requestOtp(event){
-      event.preventDefault();email=$("loginEmail").value.trim();
-      try{const d=await post({action:"requestOtp",email});if(d.success){setText("codeSentText",`Enviámos um código de acesso para ${email}.`);$("stepEmail").classList.add("hidden");$("stepCode").classList.remove("hidden");$("loginCode").focus()}else notify(d.error||"Não foi possível enviar o código.")}
-      catch(error){console.error(error);notify("Erro ao pedir o código de acesso.")}
+
+    // ---------- REGISTER / OTP / RESULT ----------
+    async function register(event) {
+      event.preventDefault();
+      if (!isOpen()) {
+        notify("As inscricoes estao encerradas.");
+        updateUI();
+        return;
+      }
+      const name = $("regName").value.trim();
+      const address = $("regEmail").value.trim();
+      const link = $("regLink").value.trim();
+      if (link) {
+        try {
+          const parsed = new URL(link);
+          if (!["http:", "https:"].includes(parsed.protocol)) throw new Error();
+        } catch {
+          notify("Insere um link valido, iniciado por https://");
+          return;
+        }
+      }
+      try {
+        const d = await post({
+          action: "registerSelf",
+          name,
+          email: address,
+          description: $("regWishlist").value.trim(),
+          reference_link: link
+        });
+        if (d.success) {
+          notify("Inscricao concluida com sucesso.");
+          event.target.reset();
+          switchTab("portal");
+          $("loginEmail").value = address;
+        } else {
+          notify(d.error || "Nao foi possivel concluir a inscricao.");
+        }
+      } catch (error) {
+        console.error(error);
+        notify("Erro de comunicacao durante a inscricao.");
+      }
     }
-    async function verifyOtp(event){
-      event.preventDefault();const code=$("loginCode").value.trim();
-      try{const d=await post({action:"verifyOtp",email,code});if(d.success){currentId=d.participant_id;setText("welcomeName",`Olá, ${d.name||"participante"}!`);$("stepCode").classList.add("hidden");$("stepDashboard").classList.remove("hidden")}else notify(d.error||"Código inválido ou expirado.")}
-      catch(error){console.error(error);notify("Erro ao validar o código.")}
+
+    async function requestOtp(event) {
+      event.preventDefault();
+      email = $("loginEmail").value.trim();
+      try {
+        const d = await post({ action: "requestOtp", email });
+        if (d.success) {
+          setText("codeSentText", "Enviamos um codigo de acesso para " + email + ".");
+          $("stepEmail").classList.add("hidden");
+          $("stepCode").classList.remove("hidden");
+          $("loginCode").focus();
+        } else {
+          notify(d.error || "Nao foi possivel enviar o codigo.");
+        }
+      } catch (error) {
+        console.error(error);
+        notify("Erro ao pedir o codigo de acesso.");
+      }
     }
-    async function openGift(){
-      if(!currentId){notify("Valida primeiro o teu acesso.");return}
-      try{
-        const d=await apiRequest(`${API}?action=getResult&id=${encodeURIComponent(currentId)}`);
-        if(d.assigned_name){
-          $("giftContainer").classList.add("hidden");$("giftResult").classList.remove("hidden");setText("assignedName",d.assigned_name);
-          const target=$("targetWishlist");target.replaceChildren();
-          const title=document.createElement("strong");title.textContent="Lista de desejos";target.appendChild(title);
-          const description=document.createElement("p");description.textContent=d.description||"Não foram indicadas sugestões.";target.appendChild(description);
-          if(d.reference_link){try{const url=new URL(d.reference_link);if(["http:","https:"].includes(url.protocol)){const anchor=document.createElement("a");anchor.href=url.href;anchor.target="_blank";anchor.rel="noopener noreferrer";anchor.textContent="↗ Consultar link de referência";target.appendChild(anchor)}}catch{}}
-        }else notify(d.error||"O sorteio ainda não foi realizado.");
-      }catch(error){console.error(error);notify("Não foi possível consultar o resultado.")}
+
+    async function verifyOtp(event) {
+      event.preventDefault();
+      const code = $("loginCode").value.trim();
+      try {
+        const d = await post({ action: "verifyOtp", email, code });
+        if (d.success) {
+          currentId = d.participant_id;
+          setText("welcomeName", "Ola, " + (d.name || "participante") + "!");
+          $("stepCode").classList.add("hidden");
+          $("stepDashboard").classList.remove("hidden");
+        } else {
+          notify(d.error || "Codigo invalido ou expirado.");
+        }
+      } catch (error) {
+        console.error(error);
+        notify("Erro ao validar o codigo.");
+      }
     }
-    function switchTab(tabName){
-      ["register","portal","admin"].forEach(name=>{$("view"+name[0].toUpperCase()+name.slice(1)).classList.add("hidden");const tab=$("tab"+name[0].toUpperCase()+name.slice(1));tab.classList.remove("active")});
-      $("view"+tabName[0].toUpperCase()+tabName.slice(1)).classList.remove("hidden");$("tab"+tabName[0].toUpperCase()+tabName.slice(1)).classList.add("active");
-      if(tabName==="admin")loadParticipants();
+
+    async function openGift() {
+      if (!currentId) {
+        notify("Valida primeiro o teu acesso.");
+        return;
+      }
+      try {
+        const d = await apiRequest(API + "?action=getResult&id=" + encodeURIComponent(currentId));
+        if (d.assigned_name) {
+          $("giftContainer").classList.add("hidden");
+          $("giftResult").classList.remove("hidden");
+          setText("assignedName", d.assigned_name);
+          const target = $("targetWishlist");
+          target.replaceChildren();
+          const title = document.createElement("strong");
+          title.textContent = "Lista de desejos";
+          target.appendChild(title);
+          const description = document.createElement("p");
+          description.textContent = d.description || "Nao foram indicadas sugestoes.";
+          target.appendChild(description);
+          if (d.reference_link) {
+            try {
+              const url = new URL(d.reference_link);
+              if (["http:", "https:"].includes(url.protocol)) {
+                const anchor = document.createElement("a");
+                anchor.href = url.href;
+                anchor.target = "_blank";
+                anchor.rel = "noopener noreferrer";
+                anchor.textContent = "Consultar link de referencia";
+                target.appendChild(anchor);
+              }
+            } catch {}
+          }
+        } else {
+          notify(d.error || "O sorteio ainda nao foi realizado.");
+        }
+      } catch (error) {
+        console.error(error);
+        notify("Nao foi possivel consultar o resultado.");
+      }
     }
-    function secretAdmin(){
-      clickCount++;clearTimeout(clickResetTimer);clickResetTimer=setTimeout(()=>clickCount=0,2200);
-      if(clickCount>=5){const tab=$("tabAdmin");tab.classList.toggle("hidden");tab.style.display=tab.classList.contains("hidden")?"none":"inline-block";clickCount=0;if(!tab.classList.contains("hidden"))loadParticipants()}
+
+    // ---------- TABS ----------
+    function switchTab(tabName) {
+      ["register", "portal", "admin"].forEach(name => {
+        const view = $("view" + name.charAt(0).toUpperCase() + name.slice(1));
+        const tab = $("tab" + name.charAt(0).toUpperCase() + name.slice(1));
+        if (view) view.classList.add("hidden");
+        if (tab) tab.classList.remove("active");
+      });
+      const activeView = $("view" + tabName.charAt(0).toUpperCase() + tabName.slice(1));
+      const activeTab = $("tab" + tabName.charAt(0).toUpperCase() + tabName.slice(1));
+      if (activeView) activeView.classList.remove("hidden");
+      if (activeTab) activeTab.classList.add("active");
+
+      if (tabName === "admin" && adminAuthenticated) {
+        loadParticipants();
+        loadDrawResults();
+      }
     }
-    function createSnow(){
-      const container=$("snow");if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;
-      for(let i=0;i<24;i++){const flake=document.createElement("span");flake.className="snowflake";flake.textContent=["❄","❅","❆","·"][Math.floor(Math.random()*4)];flake.style.left=`${Math.random()*100}vw`;flake.style.animationDuration=`${8+Math.random()*9}s`;flake.style.animationDelay=`${Math.random()*-15}s`;flake.style.fontSize=`${.55+Math.random()*.7}rem`;container.appendChild(flake)}
+
+    // ---------- SNOW ----------
+    function createSnow() {
+      const container = $("snow");
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      for (let i = 0; i < 20; i++) {
+        const flake = document.createElement("span");
+        flake.className = "snowflake";
+        flake.textContent = "·";
+        flake.style.left = (Math.random() * 100) + "vw";
+        flake.style.animationDuration = (8 + Math.random() * 9) + "s";
+        flake.style.animationDelay = (Math.random() * -15) + "s";
+        flake.style.fontSize = (0.5 + Math.random() * 0.6) + "rem";
+        container.appendChild(flake);
+      }
     }
-    document.addEventListener("DOMContentLoaded",()=>{createSnow();$("siteTitle").addEventListener("click",secretAdmin);loadConfig();updateCountdown();setInterval(updateCountdown,1000)});
+
+    document.addEventListener("DOMContentLoaded", () => {
+      createSnow();
+      checkAdminSession();
+      loadConfig();
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+    });
   </script>
 </body>
 </html>
