@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chocomigo MAV Lisboa (12/12/2026)</title>
+    <title>Chocomigo MAV Lisboa</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap');
@@ -13,58 +13,35 @@
             background: radial-gradient(ellipse at top, #0f3d2e 0%, #022c22 40%, #011611 100%);
             min-height: 100vh;
         }
-
-        h1, h2, h3 {
-            font-family: 'Playfair Display', serif;
-        }
-
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
         .snowflake {
-            position: fixed;
-            top: -10px;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 1rem;
-            pointer-events: none;
-            z-index: 50;
+            position: fixed; top: -10px; color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem; pointer-events: none; z-index: 50;
             animation: fall linear infinite;
             text-shadow: 0 0 6px rgba(255,255,255,0.4);
         }
-
         @keyframes fall {
             0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
             100% { transform: translateY(110vh) rotate(360deg); opacity: 0.3; }
         }
-
         @keyframes bounceSlow {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-10px); }
         }
-        .animate-gift {
-            animation: bounceSlow 2.2s infinite ease-in-out;
-        }
-
-        .glow-gold {
-            box-shadow: 0 0 25px rgba(245, 197, 66, 0.25);
-        }
-        .glow-red {
-            box-shadow: 0 0 30px rgba(185, 28, 28, 0.35);
-        }
-
+        .animate-gift { animation: bounceSlow 2.2s infinite ease-in-out; }
+        .glow-gold { box-shadow: 0 0 25px rgba(245, 197, 66, 0.25); }
+        .glow-red { box-shadow: 0 0 30px rgba(185, 28, 28, 0.35); }
         .glass-card {
             background: linear-gradient(145deg, rgba(6, 78, 59, 0.55), rgba(2, 44, 34, 0.7));
             backdrop-filter: blur(16px);
             border: 1px solid rgba(16, 185, 129, 0.25);
         }
-
-        input:focus, textarea:focus {
-            box-shadow: 0 0 0 3px rgba(245, 197, 66, 0.25);
-        }
-
+        input:focus, textarea:focus { box-shadow: 0 0 0 3px rgba(245, 197, 66, 0.25); }
         .tab-active {
             background: linear-gradient(135deg, #f5c542, #eab308);
             color: #022c22;
             box-shadow: 0 4px 14px rgba(245, 197, 66, 0.35);
         }
-
         .btn-primary {
             background: linear-gradient(135deg, #f5c542, #eab308);
             transition: all 0.25s ease;
@@ -73,7 +50,6 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(245, 197, 66, 0.4);
         }
-
         .btn-danger {
             background: linear-gradient(135deg, #dc2626, #b91c1c);
             transition: all 0.25s ease;
@@ -82,27 +58,14 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(185, 28, 28, 0.45);
         }
-
         .ornament {
             height: 2px;
             background: linear-gradient(90deg, transparent, #f5c542, transparent);
         }
-
-        #tabAdmin {
-            display: none;
-        }
-
-        .countdown-number {
-            font-variant-numeric: tabular-nums;
-            min-width: 2.8rem;
-        }
-
-        .participant-row {
-            transition: background 0.15s;
-        }
-        .participant-row:hover {
-            background: rgba(16, 185, 129, 0.08);
-        }
+        #tabAdmin { display: none; }
+        .countdown-number { font-variant-numeric: tabular-nums; min-width: 2.8rem; }
+        .participant-row { transition: background 0.15s; }
+        .participant-row:hover { background: rgba(16, 185, 129, 0.08); }
     </style>
 </head>
 <body class="text-slate-100 min-h-screen flex flex-col justify-between relative overflow-x-hidden">
@@ -119,7 +82,7 @@
                 </div>
                 <div>
                     <h1 class="text-2xl md:text-3xl font-bold tracking-wide text-amber-300 drop-shadow-sm">CHOCOMIGO</h1>
-                    <p class="text-xs md:text-sm text-emerald-300/90 font-medium tracking-wide">Troca de Presentes • 12/12/2026</p>
+                    <p class="text-xs md:text-sm text-emerald-300/90 font-medium tracking-wide">Troca de Presentes • <span id="headerEventDate">12/12/2026</span></p>
                 </div>
             </div>
 
@@ -143,9 +106,8 @@
     <!-- MAIN -->
     <main class="relative z-10 max-w-xl mx-auto w-full px-4 sm:px-6 py-6 my-auto">
 
-        <!-- ===================== ABA 1: INSCRIÇÃO ===================== -->
+        <!-- ABA 1: INSCRIÇÃO -->
         <div id="viewRegister" class="glass-card p-7 md:p-9 rounded-3xl shadow-2xl glow-gold">
-            
             <div class="text-center mb-7">
                 <span id="phaseBadge" class="inline-flex items-center gap-1.5 bg-amber-500/15 text-amber-300 border border-amber-500/30 text-xs px-3.5 py-1.5 rounded-full font-semibold tracking-wide">
                     🎄 Fase 1: Inscrições Abertas
@@ -197,7 +159,7 @@
             </div>
         </div>
 
-        <!-- ===================== ABA 2: VER SORTEIO ===================== -->
+        <!-- ABA 2: VER SORTEIO -->
         <div id="viewPortal" class="hidden glass-card p-7 md:p-9 rounded-3xl shadow-2xl glow-gold">
 
             <div id="countdownSection" class="text-center py-4">
@@ -272,7 +234,7 @@
                     <div class="text-center border-b border-emerald-700/40 pb-5">
                         <h2 class="text-3xl font-bold text-amber-300" id="welcomeName">Olá!</h2>
                         <p class="text-emerald-200/90 text-sm mt-2">
-                            Orçamento Máximo: <b class="text-amber-300">20 €</b> • Troca: <b class="text-white">12/12/2026</b>
+                            Orçamento Máximo: <b class="text-amber-300" id="budgetDisplay">20 €</b> • Troca: <b class="text-white" id="eventDateDisplay">12/12/2026</b>
                         </p>
                     </div>
 
@@ -302,7 +264,7 @@
             </div>
         </div>
 
-        <!-- ===================== ABA 3: ADMIN (MELHORADO) ===================== -->
+        <!-- ABA 3: ADMIN -->
         <div id="viewAdmin" class="hidden glass-card p-6 md:p-8 rounded-3xl shadow-2xl space-y-6">
             
             <div class="text-center">
@@ -311,33 +273,44 @@
                 <p class="text-emerald-300/80 text-sm">Acesso restrito • Chocomigo</p>
             </div>
 
-            <!-- Estado atual -->
             <div class="bg-emerald-950/50 border border-emerald-700/40 rounded-xl p-4 text-center">
                 <p class="text-xs text-emerald-400 uppercase tracking-wider mb-1">Estado atual</p>
                 <p id="adminStatusText" class="text-lg font-semibold text-amber-300">A carregar...</p>
             </div>
 
-            <!-- Alterar data limite -->
-            <div class="bg-emerald-950/40 border border-emerald-700/30 rounded-xl p-4 space-y-3">
-                <label class="block text-xs font-semibold text-emerald-300 uppercase tracking-wide">Data limite das inscrições</label>
-                <div class="flex gap-2">
+            <!-- Configurações -->
+            <div class="bg-emerald-950/40 border border-emerald-700/30 rounded-xl p-4 space-y-4">
+                <h3 class="text-sm font-semibold text-emerald-300 uppercase tracking-wide">Configurações do Evento</h3>
+                
+                <div>
+                    <label class="block text-xs text-emerald-400 mb-1">Data limite das inscrições</label>
                     <input type="date" id="adminDeadline" 
-                        class="flex-1 bg-emerald-950 text-white px-3 py-2.5 rounded-lg border border-emerald-700 text-sm focus:outline-none focus:border-amber-400">
-                    <button onclick="updateDeadline()" 
-                        class="px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-emerald-950 font-bold text-sm rounded-lg transition">
-                        Guardar
-                    </button>
+                        class="w-full bg-emerald-950 text-white px-3 py-2.5 rounded-lg border border-emerald-700 text-sm focus:outline-none focus:border-amber-400">
                 </div>
-                <p class="text-[11px] text-emerald-500">Esta data controla quando as inscrições fecham e quando a área do participante abre.</p>
+
+                <div>
+                    <label class="block text-xs text-emerald-400 mb-1">Data da troca de presentes</label>
+                    <input type="text" id="adminEventDate" placeholder="12/12/2026"
+                        class="w-full bg-emerald-950 text-white px-3 py-2.5 rounded-lg border border-emerald-700 text-sm focus:outline-none focus:border-amber-400">
+                </div>
+
+                <div>
+                    <label class="block text-xs text-emerald-400 mb-1">Orçamento máximo (€)</label>
+                    <input type="number" id="adminBudget" min="1" step="1" placeholder="20"
+                        class="w-full bg-emerald-950 text-white px-3 py-2.5 rounded-lg border border-emerald-700 text-sm focus:outline-none focus:border-amber-400">
+                </div>
+
+                <button onclick="saveConfig()" 
+                    class="w-full px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-emerald-950 font-bold text-sm rounded-lg transition">
+                    Guardar Configurações
+                </button>
             </div>
 
-            <!-- Botão de Sorteio -->
             <button onclick="triggerDraw()"
                 class="w-full btn-danger text-white font-bold py-3.5 rounded-xl shadow-lg border border-amber-400/50 text-sm tracking-wide">
                 🎲 Realizar Sorteio Cego (1 para 1)
             </button>
 
-            <!-- Lista de Participantes -->
             <div>
                 <div class="flex items-center justify-between mb-3">
                     <h3 class="text-sm font-semibold text-emerald-300 uppercase tracking-wide">Participantes inscritos</h3>
@@ -360,9 +333,8 @@
 
     </main>
 
-    <!-- FOOTER -->
     <footer class="relative z-10 p-5 text-center text-xs text-emerald-400/50 border-t border-emerald-900/30">
-        <p class="tracking-wide">Chocomigo • Evento a 12/12/2026 🎄</p>
+        <p class="tracking-wide">Chocomigo • Evento a <span id="footerEventDate">12/12/2026</span> 🎄</p>
     </footer>
 
     <script>
@@ -371,11 +343,46 @@
         let participantEmail = "";
         let adminClickCount = 0;
 
-        // Data limite (pode ser alterada no Admin)
+        // Valores dinâmicos (carregados do backend)
         let REGISTRATION_DEADLINE = new Date('2026-11-28T23:59:59');
+        let EVENT_DATE = '12/12/2026';
+        let BUDGET_LIMIT = '20';
 
         function isRegistrationOpen() {
             return new Date() <= REGISTRATION_DEADLINE;
+        }
+
+        async function loadConfig() {
+            try {
+                const res = await fetch(`${API_URL}?action=getConfig`);
+                const data = await res.json();
+                
+                if (data.registration_deadline) {
+                    REGISTRATION_DEADLINE = new Date(data.registration_deadline + 'T23:59:59');
+                }
+                if (data.event_date) EVENT_DATE = data.event_date;
+                if (data.budget_limit) BUDGET_LIMIT = data.budget_limit;
+
+                // Atualizar todos os locais onde aparecem
+                document.getElementById('headerEventDate').textContent = EVENT_DATE;
+                document.getElementById('footerEventDate').textContent = EVENT_DATE;
+                document.getElementById('eventDateDisplay').textContent = EVENT_DATE;
+                document.getElementById('budgetDisplay').textContent = BUDGET_LIMIT + ' €';
+
+                // Preencher admin
+                const yyyy = REGISTRATION_DEADLINE.getFullYear();
+                const mm = String(REGISTRATION_DEADLINE.getMonth() + 1).padStart(2, '0');
+                const dd = String(REGISTRATION_DEADLINE.getDate()).padStart(2, '0');
+                document.getElementById('adminDeadline').value = `${yyyy}-${mm}-${dd}`;
+                document.getElementById('adminEventDate').value = EVENT_DATE;
+                document.getElementById('adminBudget').value = BUDGET_LIMIT;
+
+                updateRegistrationState();
+                updatePortalState();
+                updateCountdown();
+            } catch (err) {
+                console.error('Erro ao carregar config:', err);
+            }
         }
 
         function updateRegistrationState() {
@@ -384,7 +391,6 @@
             const badge = document.getElementById('phaseBadge');
             const deadlineText = document.getElementById('deadlineText');
 
-            // Formatar data para mostrar
             const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
             deadlineText.textContent = REGISTRATION_DEADLINE.toLocaleDateString('pt-PT', options);
 
@@ -439,21 +445,50 @@
             document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
         }
 
-        // Atualizar data limite a partir do Admin
-        function updateDeadline() {
-            const input = document.getElementById('adminDeadline').value;
-            if (!input) {
-                alert('Escolhe uma data válida.');
+        async function saveConfig() {
+            const deadline = document.getElementById('adminDeadline').value;
+            const eventDate = document.getElementById('adminEventDate').value.trim();
+            const budget = document.getElementById('adminBudget').value;
+
+            if (!deadline || !eventDate || !budget) {
+                alert('Preenche todos os campos.');
                 return;
             }
-            REGISTRATION_DEADLINE = new Date(input + 'T23:59:59');
-            updateRegistrationState();
-            updatePortalState();
-            updateCountdown();
-            alert('Data limite atualizada com sucesso!');
+
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'updateConfig',
+                        registration_deadline: deadline,
+                        event_date: eventDate,
+                        budget_limit: budget
+                    })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    REGISTRATION_DEADLINE = new Date(deadline + 'T23:59:59');
+                    EVENT_DATE = eventDate;
+                    BUDGET_LIMIT = budget;
+
+                    document.getElementById('headerEventDate').textContent = EVENT_DATE;
+                    document.getElementById('footerEventDate').textContent = EVENT_DATE;
+                    document.getElementById('eventDateDisplay').textContent = EVENT_DATE;
+                    document.getElementById('budgetDisplay').textContent = BUDGET_LIMIT + ' €';
+
+                    updateRegistrationState();
+                    updatePortalState();
+                    updateCountdown();
+                    alert('Configurações guardadas com sucesso!');
+                } else {
+                    alert(data.error || 'Erro ao guardar.');
+                }
+            } catch (err) {
+                alert('Erro de comunicação.');
+            }
         }
 
-        // Carregar lista de participantes (Admin)
         async function loadParticipants() {
             const container = document.getElementById('participantsList');
             container.innerHTML = '<div class="p-4 text-center text-emerald-500 text-sm">A carregar...</div>';
@@ -468,7 +503,6 @@
                     return;
                 }
 
-                // Atualizar estado
                 document.getElementById('adminStatusText').textContent = `${data.length} participante(s) inscrito(s)`;
 
                 let html = `
@@ -484,7 +518,7 @@
                     const viewed = p.result_viewed ? '👁️' : '';
                     html += `
                         <div class="grid grid-cols-12 gap-2 px-3 py-2.5 text-xs participant-row border-b border-emerald-900/50">
-                            <div class="col-span-4 font-medium text-amber-200 truncate" title="${p.name}">${p.name || '—'}</div>
+                            <div class="col-span-4 font-medium text-amber-200 truncate" title="${p.name || ''}">${p.name || '—'}</div>
                             <div class="col-span-5 text-emerald-300 truncate" title="${p.email}">${p.email}</div>
                             <div class="col-span-3 text-center text-sm">${hasWishlist} ${viewed}</div>
                         </div>
@@ -503,12 +537,7 @@
                 const tab = document.getElementById('tabAdmin');
                 if (tab.style.display === 'none' || tab.style.display === '') {
                     tab.style.display = 'inline-block';
-                    loadParticipants(); // carrega a lista quando abre o admin
-                    // Preenche a data atual no input
-                    const yyyy = REGISTRATION_DEADLINE.getFullYear();
-                    const mm = String(REGISTRATION_DEADLINE.getMonth() + 1).padStart(2, '0');
-                    const dd = String(REGISTRATION_DEADLINE.getDate()).padStart(2, '0');
-                    document.getElementById('adminDeadline').value = `${yyyy}-${mm}-${dd}`;
+                    loadParticipants();
                 } else {
                     tab.style.display = 'none';
                     if (!document.getElementById('viewAdmin').classList.contains('hidden')) {
@@ -538,9 +567,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             createSnowflakes();
-            updateRegistrationState();
-            updatePortalState();
-            updateCountdown();
+            loadConfig();
             setInterval(updateCountdown, 1000);
         });
 
@@ -580,89 +607,117 @@
             const description = document.getElementById('regWishlist').value;
             const reference_link = document.getElementById('regLink').value;
 
-            const res = await fetch(API_URL, {
-                method: 'POST',
-                body: JSON.stringify({ action: 'registerSelf', name, email, description, reference_link })
-            });
-            const data = await res.json();
-            if (res.ok) {
-                alert('Inscrição efetuada com sucesso! Já podes participar no Chocomigo.');
-                document.getElementById('regName').value = '';
-                document.getElementById('regEmail').value = '';
-                document.getElementById('regWishlist').value = '';
-                document.getElementById('regLink').value = '';
-                switchTab('portal');
-            } else {
-                alert(data.error || 'Erro ao efetuar inscrição.');
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'registerSelf', name, email, description, reference_link })
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    alert('Inscrição efetuada com sucesso! Já podes participar no Chocomigo.');
+                    document.getElementById('regName').value = '';
+                    document.getElementById('regEmail').value = '';
+                    document.getElementById('regWishlist').value = '';
+                    document.getElementById('regLink').value = '';
+                    switchTab('portal');
+                } else {
+                    alert(data.error || 'Erro ao efetuar inscrição.');
+                }
+            } catch (err) {
+                alert('Erro de comunicação. Tenta novamente.');
             }
         }
 
         async function requestOtp(e) {
             e.preventDefault();
             participantEmail = document.getElementById('loginEmail').value;
-            const res = await fetch(API_URL, {
-                method: 'POST',
-                body: JSON.stringify({ action: 'requestOtp', email: participantEmail })
-            });
-            const data = await res.json();
-            if (res.ok) {
-                document.getElementById('codeSentText').innerText = `Código enviado para ${participantEmail}. Verifica a tua caixa de entrada.`;
-                document.getElementById('stepEmail').classList.add('hidden');
-                document.getElementById('stepCode').classList.remove('hidden');
-            } else {
-                alert(data.error || 'E-mail não encontrado.');
+            
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'requestOtp', email: participantEmail })
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    document.getElementById('codeSentText').innerText = `Código enviado para ${participantEmail}. Verifica a tua caixa de entrada.`;
+                    document.getElementById('stepEmail').classList.add('hidden');
+                    document.getElementById('stepCode').classList.remove('hidden');
+                } else {
+                    alert(data.error || 'E-mail não encontrado.');
+                }
+            } catch (err) {
+                alert('Erro de comunicação.');
             }
         }
 
         async function verifyOtp(e) {
             e.preventDefault();
             const code = document.getElementById('loginCode').value;
-            const res = await fetch(API_URL, {
-                method: 'POST',
-                body: JSON.stringify({ action: 'verifyOtp', email: participantEmail, code: code })
-            });
-            const data = await res.json();
-            if (res.ok) {
-                currentParticipantId = data.participant_id;
-                document.getElementById('welcomeName').innerText = `Olá, ${data.name}!`;
-                document.getElementById('stepCode').classList.add('hidden');
-                document.getElementById('stepDashboard').classList.remove('hidden');
-            } else {
-                alert(data.error || 'Código inválido.');
+            
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'verifyOtp', email: participantEmail, code: code })
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    currentParticipantId = data.participant_id;
+                    document.getElementById('welcomeName').innerText = `Olá, ${data.name}!`;
+                    document.getElementById('stepCode').classList.add('hidden');
+                    document.getElementById('stepDashboard').classList.remove('hidden');
+                } else {
+                    alert(data.error || 'Código inválido.');
+                }
+            } catch (err) {
+                alert('Erro de comunicação.');
             }
         }
 
         async function openGift() {
-            const res = await fetch(`${API_URL}?action=getResult&id=${currentParticipantId}`);
-            const data = await res.json();
-            if (res.ok) {
-                document.getElementById('giftContainer').classList.add('hidden');
-                document.getElementById('giftResult').classList.remove('hidden');
-                document.getElementById('assignedNameDisplay').innerText = data.assigned_name;
+            try {
+                const res = await fetch(`${API_URL}?action=getResult&id=${currentParticipantId}`);
+                const data = await res.json();
+                
+                if (data.assigned_name) {
+                    document.getElementById('giftContainer').classList.add('hidden');
+                    document.getElementById('giftResult').classList.remove('hidden');
+                    document.getElementById('assignedNameDisplay').innerText = data.assigned_name;
 
-                const wlDiv = document.getElementById('targetWishlist');
-                wlDiv.innerHTML = `<p class="text-amber-300 font-bold mb-1.5">Lista de Desejos de Chocolates:</p>
-                                  <p class="text-slate-200 mb-2.5 leading-relaxed">${data.description}</p>
-                                  ${data.reference_link ? `<a href="${data.reference_link}" target="_blank" class="text-amber-300 underline text-xs hover:text-amber-200 transition">🔗 Ver link de referência</a>` : ''}`;
-            } else {
-                alert(data.error || 'O sorteio ainda não foi realizado.');
+                    const wlDiv = document.getElementById('targetWishlist');
+                    wlDiv.innerHTML = `
+                        <p class="text-amber-300 font-bold mb-1.5">Lista de Desejos de Chocolates:</p>
+                        <p class="text-slate-200 mb-2.5 leading-relaxed">${data.description || 'Sem sugestões registadas.'}</p>
+                        ${data.reference_link ? `<a href="${data.reference_link}" target="_blank" class="text-amber-300 underline text-xs hover:text-amber-200 transition">🔗 Ver link de referência</a>` : ''}
+                    `;
+                } else {
+                    alert(data.error || 'O sorteio ainda não foi realizado.');
+                }
+            } catch (err) {
+                alert('Erro ao obter o resultado.');
             }
         }
 
         async function triggerDraw() {
             if (!confirm('Deseja realizar o sorteio cego com todos os participantes inscritos?\n\nIsto irá criar um sorteio 1 para 1 (sem repetições).')) return;
             
-            const res = await fetch(API_URL, {
-                method: 'POST',
-                body: JSON.stringify({ action: 'executeDraw' })
-            });
-            const data = await res.json();
-            
-            if (res.ok) {
-                alert(data.message);
-                loadParticipants();
-            } else {
-                alert(data.error || 'Erro ao realizar o sorteio.');
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'executeDraw' })
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    alert(data.message);
+                    loadParticipants();
+                } else {
+                    alert(data.error || 'Erro ao realizar o sorteio.');
+                }
+            } catch (err) {
+                alert('Erro de comunicação.');
             }
         }
     </script>
