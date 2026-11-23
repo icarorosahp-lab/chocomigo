@@ -1,341 +1,404 @@
-<script>
-  const API = "https://script.google.com/macros/s/AKfycbyYz3ln24RS22cXQK2zh4bH2dJJVmPcBA6THyfKTdsZme0vZOu65e9UQjen5rLPCYH2/exec"; // ← confirma se este é o URL atual
-  let currentId = null;
-  let email = "";
-  let clickCount = 0;
-  let deadline = new Date('2026-11-28T23:59:59');
-  let eventDate = '12/12/2026 19:30';
-  let budget = '20';
-  let status = 'open';
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#10251d">
+  <meta name="description" content="Organiza o teu Amigo Secreto de Natal com o Chocomigo.">
+  <title>Chocomigo | Amigo Secreto de Natal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--pine:#10251d;--pine-2:#18372b;--pine-3:#214735;--cream:#fffaf0;--paper:#fffdf8;--gold:#d8b46a;--gold-light:#f3dfae;--red:#a83b3b;--muted:#718078;--line:#e9e5da;--shadow:0 24px 70px rgba(8,28,19,.16)}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;min-height:100vh;background:var(--cream);color:#26352d;font-family:"DM Sans",sans-serif}
+    button,input,textarea{font:inherit}
+    button{cursor:pointer}
+    .page-bg{position:fixed;inset:0;z-index:-2;background:radial-gradient(circle at 10% 10%,rgba(216,180,106,.16),transparent 28%),radial-gradient(circle at 90% 75%,rgba(30,91,62,.12),transparent 30%),var(--cream)}
+    .topbar{background:var(--pine);color:#f8f3e7;border-bottom:1px solid rgba(216,180,106,.35)}
+    .topbar-inner{max-width:1120px;margin:auto;padding:15px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{display:flex;align-items:center;gap:11px;font-weight:700;letter-spacing:.12em;font-size:13px}
+    .brand-mark{width:37px;height:37px;border:1px solid rgba(243,223,174,.6);border-radius:50%;display:grid;place-items:center;color:var(--gold-light);font-size:19px}
+    .top-date{font-size:12px;color:#d9e1da}
+    .hero{background:linear-gradient(135deg,#10251d 0%,#173c2d 58%,#24523b 100%);color:white;position:relative;overflow:hidden}
+    .hero:before,.hero:after{content:"";position:absolute;border:1px solid rgba(243,223,174,.13);border-radius:50%;width:390px;height:390px;right:-125px;top:-220px}
+    .hero:after{width:270px;height:270px;right:100px;top:-205px}
+    .hero-inner{max-width:1120px;margin:auto;padding:65px 24px 58px;position:relative;z-index:1;text-align:center}
+    .eyebrow{color:var(--gold-light);font-size:11px;letter-spacing:.25em;text-transform:uppercase;font-weight:700}
+    h1{font-family:"Playfair Display",serif;font-size:clamp(42px,7vw,76px);line-height:1.03;margin:15px 0 13px;letter-spacing:-.035em}
+    .hero-copy{max-width:560px;margin:0 auto;color:#d9e5dc;font-size:15px;line-height:1.8}
+    .hero-meta{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:25px}
+    .meta-pill{border:1px solid rgba(243,223,174,.28);background:rgba(255,255,255,.06);padding:9px 14px;border-radius:999px;font-size:12px;color:#f4ead4}
+    .main{max-width:1000px;margin:-25px auto 70px;padding:0 22px;position:relative;z-index:2}
+    .shell{background:var(--paper);border:1px solid rgba(225,218,201,.9);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+    .nav{display:flex;gap:7px;padding:15px 18px;border-bottom:1px solid var(--line);background:#fffefa;flex-wrap:wrap}
+    .nav button{border:0;background:transparent;color:#66746b;border-radius:10px;padding:11px 16px;font-weight:700;font-size:12px;transition:.2s}
+    .nav button:hover{background:#f3f0e7;color:var(--pine)}
+    .nav button.active{background:var(--pine);color:#fff8e9;box-shadow:0 5px 14px rgba(16,37,29,.16)}
+    .content{padding:clamp(22px,4vw,42px)}
+    .section-head{margin-bottom:25px}
+    .section-kicker{color:#a17c37;text-transform:uppercase;font-size:10px;font-weight:700;letter-spacing:.2em}
+    h2{font-family:"Playfair Display",serif;font-size:30px;color:var(--pine);margin:7px 0 8px}
+    .sub{color:var(--muted);font-size:13px;line-height:1.7;margin:0}
+    .status{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:8px 12px;font-size:11px;font-weight:700;margin-top:17px}
+    .status.open{background:#e8f3e9;color:#28633e}.status.closed{background:#f9e9e6;color:#963d36}
+    .status-dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+    .countdown-wrap{margin:24px 0 28px;padding:20px;background:#f5f2e9;border:1px solid #ebe4d2;border-radius:16px}
+    .countdown-title{text-align:center;color:#66746b;font-size:10px;letter-spacing:.17em;text-transform:uppercase;font-weight:700;margin-bottom:14px}
+    .countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:440px;margin:auto}
+    .time-box{background:white;border:1px solid #ece7db;border-radius:12px;text-align:center;padding:13px 5px}
+    .time-value{display:block;font-family:"Playfair Display",serif;color:var(--pine);font-size:27px;font-weight:700}
+    .time-label{display:block;color:#8a958e;font-size:9px;text-transform:uppercase;letter-spacing:.13em;margin-top:3px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:17px}
+    .field{display:flex;flex-direction:column;gap:7px}
+    .field.full{grid-column:1/-1}
+    label{font-size:11px;font-weight:700;color:#405148}
+    input,textarea{width:100%;border:1px solid #dddcd2;border-radius:10px;background:#fff;padding:13px 14px;color:#26352d;outline:none;transition:border .2s,box-shadow .2s}
+    input:focus,textarea:focus{border-color:#8caa91;box-shadow:0 0 0 3px rgba(58,112,75,.1)}
+    input::placeholder,textarea::placeholder{color:#a6afa8}
+    textarea{min-height:104px;resize:vertical}
+    .hint{font-size:10px;color:#8a958e;line-height:1.5}
+    .btn{border:0;border-radius:10px;padding:13px 19px;font-weight:700;font-size:12px;transition:transform .2s,box-shadow .2s,background .2s}
+    .btn:hover{transform:translateY(-1px)}
+    .btn-primary{background:var(--pine);color:#fff8e9;box-shadow:0 7px 16px rgba(16,37,29,.15)}
+    .btn-primary:hover{background:#214735}
+    .btn-gold{background:var(--gold);color:#2b2a20}
+    .btn-soft{background:#edf1eb;color:#355541}
+    .btn-danger{background:#f8e9e6;color:#963d36}
+    .form-actions{margin-top:20px;display:flex;justify-content:flex-end}
+    .closed-box{padding:28px;border-radius:15px;background:#f8f3e9;border:1px solid #eee3cf;text-align:center}
+    .closed-icon{font-size:31px}.closed-box h3{font-family:"Playfair Display",serif;color:var(--pine);font-size:23px;margin:10px 0 7px}
+    .closed-box p{color:#718078;font-size:13px;line-height:1.7;margin:0}
+    .divider{height:1px;background:var(--line);margin:27px 0}
+    .portal-card{max-width:520px;margin:auto}
+    .step{background:#f8f7f1;border:1px solid #ece8dc;padding:22px;border-radius:15px}
+    .step h3{font-family:"Playfair Display",serif;color:var(--pine);font-size:21px;margin:0 0 7px}
+    .step p{font-size:12px;color:var(--muted);line-height:1.6;margin:0 0 17px}
+    .step .field{margin-bottom:14px}
+    .gift-card{background:var(--pine);color:white;border-radius:16px;padding:25px;text-align:center}
+    .gift-card .small{color:var(--gold-light);font-size:10px;letter-spacing:.18em;text-transform:uppercase}
+    .gift-card h3{font-family:"Playfair Display",serif;font-size:34px;color:#fff4d8;margin:9px 0 18px}
+    .wishlist{margin-top:18px;padding:18px;background:rgba(255,255,255,.08);border:1px solid rgba(243,223,174,.2);border-radius:12px;text-align:left;font-size:13px;line-height:1.7;color:#e7eee8}
+    .wishlist strong{display:block;color:var(--gold-light);margin-bottom:5px}
+    .wishlist a{color:var(--gold-light);font-weight:700}
+    .admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .admin-card{border:1px solid var(--line);border-radius:14px;padding:19px;background:#fffefa}
+    .admin-card h3{font-family:"Playfair Display",serif;color:var(--pine);font-size:19px;margin:0 0 15px}
+    .admin-card .field{margin-bottom:13px}
+    .admin-actions{display:flex;flex-wrap:wrap;gap:8px}
+    .admin-status{font-size:10px;font-weight:700;padding:7px 10px;border-radius:999px;background:#e8f3e9;color:#28633e;display:inline-block;margin-bottom:15px}
+    .participants{border:1px solid var(--line);border-radius:12px;overflow:auto;max-height:330px}
+    .participant-row{display:grid;grid-template-columns:1fr 1.2fr 100px;gap:10px;padding:12px 14px;border-bottom:1px solid #efede6;font-size:11px;align-items:center}
+    .participant-row:last-child{border-bottom:0}
+    .participant-row.head{position:sticky;top:0;background:#f2f3ed;color:#68766d;text-transform:uppercase;font-size:9px;font-weight:700;letter-spacing:.08em}
+    .participant-name{font-weight:700;color:#46574c}.participant-email{color:#718078;overflow-wrap:anywhere}
+    .participant-state{text-align:center}
+    .notice{font-size:11px;color:#8a958e;line-height:1.6;margin-top:12px}
+    footer{text-align:center;padding:0 20px 35px;color:#879189;font-size:11px}
+    footer strong{color:#496253}
+    .hidden{display:none!important}
+    #snow{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:5}
+    .snowflake{position:absolute;top:-25px;color:#d1d9d1;opacity:.55;animation:snowfall linear infinite;text-shadow:0 1px 4px rgba(255,255,255,.7)}
+    @keyframes snowfall{to{transform:translate3d(25px,110vh,0) rotate(260deg)}}
+    .toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);background:var(--pine);color:#fff8e9;padding:12px 18px;border-radius:10px;font-size:12px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.25s;z-index:10}
+    .toast.show{opacity:1;transform:translate(-50%,0)}
+    @media(max-width:700px){.hero-inner{padding:48px 20px 52px}.main{padding:0 12px}.content{padding:23px 18px}.form-grid,.admin-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.topbar-inner{padding:13px 17px}.top-date{font-size:10px}.nav{padding:12px;gap:4px}.nav button{flex:1;padding:10px 7px;font-size:11px}.participant-row{grid-template-columns:1fr 1fr 68px;padding:11px 9px;font-size:10px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <div class="page-bg"></div>
+  <div id="snow" aria-hidden="true"></div>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><span class="brand-mark">✦</span><span>CHOCOMIGO</span></div>
+      <div class="top-date">🎄 Edição de Natal · <span id="headerDate">12/12/2026 19:30</span></div>
+    </div>
+  </header>
 
-  // ===== UTIL =====
-  function isOpen() {
-    return new Date() <= deadline && status !== 'drawn';
-  }
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">Uma tradição para partilhar</div>
+      <h1 id="siteTitle">CHOCOMIGO</h1>
+      <p class="hero-copy">O Natal fica melhor quando há surpresas, carinho e um presente escolhido a pensar em alguém. Inscreve-te e participa no nosso Amigo Secreto.</p>
+      <div class="hero-meta">
+        <span class="meta-pill">📅 <span id="eventDateDisplay">12/12/2026 19:30</span></span>
+        <span class="meta-pill">🎁 Orçamento: <strong id="budgetDisplay">20 €</strong></span>
+      </div>
+    </div>
+  </section>
 
-  async function loadConfig() {
-    try {
-      const res = await fetch(`${API}?action=getConfig`);
-      const d = await res.json();
+  <main class="main">
+    <div class="shell">
+      <nav class="nav" aria-label="Navegação principal">
+        <button id="tabRegister" class="active" type="button" onclick="switchTab('register')">🎄 Inscrição</button>
+        <button id="tabPortal" type="button" onclick="switchTab('portal')">🎁 Área do participante</button>
+        <button id="tabAdmin" type="button" class="hidden" style="display:none" onclick="switchTab('admin')">⚙ Administração</button>
+      </nav>
 
-      // Datas
-      if (d.registration_deadline) {
-        deadline = new Date(d.registration_deadline + 'T23:59:59');
-      }
-      eventDate = d.event_date || '12/12/2026 19:30';
-      budget = d.budget_limit || '20';
-      status = d.status || 'open';
+      <section id="viewRegister" class="content">
+        <div class="section-head">
+          <div class="section-kicker">Participa na troca de presentes</div>
+          <h2>Entra na brincadeira.</h2>
+          <p class="sub">Preenche os teus dados e deixa algumas pistas sobre o presente que gostarias de receber.</p>
+          <span id="phaseBadge" class="status open"><span class="status-dot"></span> A verificar inscrições…</span>
+        </div>
 
-      // Atualizar todo o site
-      document.getElementById('siteTitle').textContent = (d.event_name || 'Chocomigo').toUpperCase();
-      document.getElementById('headerDate').textContent = eventDate;
-      document.getElementById('footerDate').textContent = eventDate;
-      document.getElementById('eventDateDisplay').textContent = eventDate;
-      document.getElementById('budgetDisplay').textContent = budget + ' €';
-      document.getElementById('deadlineText').textContent = deadline.toLocaleDateString('pt-PT');
+        <div id="countdownSection" class="countdown-wrap">
+          <div class="countdown-title">Tempo restante para o fim das inscrições</div>
+          <div class="countdown">
+            <div class="time-box"><span class="time-value" id="days">00</span><span class="time-label">Dias</span></div>
+            <div class="time-box"><span class="time-value" id="hours">00</span><span class="time-label">Horas</span></div>
+            <div class="time-box"><span class="time-value" id="minutes">00</span><span class="time-label">Minutos</span></div>
+            <div class="time-box"><span class="time-value" id="seconds">00</span><span class="time-label">Segundos</span></div>
+          </div>
+          <p class="hint" style="text-align:center;margin:12px 0 0">Inscrições até <strong id="deadlineText">28/11/2026</strong>.</p>
+        </div>
 
-      // Preencher campos do Admin
-      document.getElementById('cfgName').value = d.event_name || 'Chocomigo';
-      document.getElementById('cfgEventDate').value = eventDate;
-      document.getElementById('cfgBudget').value = budget;
-      document.getElementById('cfgDeadline').value = d.registration_deadline || '2026-11-28';
+        <form id="registerForm" onsubmit="register(event)">
+          <div class="form-grid">
+            <div class="field">
+              <label for="regName">Nome completo</label>
+              <input id="regName" name="name" type="text" placeholder="Como te devemos identificar?" autocomplete="name" required maxlength="100">
+            </div>
+            <div class="field">
+              <label for="regEmail">E-mail</label>
+              <input id="regEmail" name="email" type="email" placeholder="nome@exemplo.com" autocomplete="email" required maxlength="160">
+            </div>
+            <div class="field full">
+              <label for="regWishlist">Lista de desejos e sugestões</label>
+              <textarea id="regWishlist" name="wishlist" placeholder="Indica gostos, interesses, cores, sugestões ou algo que prefiras evitar…" maxlength="1200"></textarea>
+              <span class="hint">Partilha algumas ideias para ajudar o teu Amigo Secreto a escolher.</span>
+            </div>
+            <div class="field full">
+              <label for="regLink">Link de referência <span style="font-weight:400;color:#8a958e">(opcional)</span></label>
+              <input id="regLink" name="link" type="url" placeholder="https://…">
+              <span class="hint">Podes inserir um link de um produto ou exemplo de presente.</span>
+            </div>
+          </div>
+          <div class="form-actions"><button class="btn btn-primary" type="submit">Confirmar inscrição <span aria-hidden="true">→</span></button></div>
+        </form>
 
-      updateUI();
-    } catch (e) {
-      console.error('Erro ao carregar config:', e);
+        <div id="registrationClosed" class="closed-box hidden">
+          <div class="closed-icon">🔒</div>
+          <h3>As inscrições estão encerradas</h3>
+          <p>O período de inscrição terminou. Acede à área do participante para consultar o estado do sorteio, quando estiver disponível.</p>
+          <button class="btn btn-primary" style="margin-top:17px" type="button" onclick="switchTab('portal')">Aceder à minha área</button>
+        </div>
+      </section>
+
+      <section id="viewPortal" class="content hidden">
+        <div class="section-head">
+          <div class="section-kicker">A tua área pessoal</div>
+          <h2>Consulta a tua participação.</h2>
+          <p class="sub">Valida o teu e-mail através do código que receberás para aceder à informação do sorteio.</p>
+        </div>
+        <div class="portal-card">
+          <div id="loginSection" class="step">
+            <div id="stepEmail">
+              <h3>Entrar na área do participante</h3>
+              <p>Introduz o mesmo endereço de e-mail que usaste no momento da inscrição.</p>
+              <form onsubmit="requestOtp(event)">
+                <div class="field"><label for="loginEmail">Endereço de e-mail</label><input id="loginEmail" type="email" autocomplete="email" placeholder="nome@exemplo.com" required></div>
+                <button class="btn btn-primary" type="submit">Enviar código de acesso</button>
+              </form>
+            </div>
+            <div id="stepCode" class="hidden">
+              <h3>Confirma o teu acesso</h3>
+              <p id="codeSentText">Enviámos um código para o teu e-mail.</p>
+              <form onsubmit="verifyOtp(event)">
+                <div class="field"><label for="loginCode">Código de verificação</label><input id="loginCode" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="Introduz o código recebido" required maxlength="12"></div>
+                <button class="btn btn-primary" type="submit">Validar código</button>
+              </form>
+            </div>
+          </div>
+
+          <div id="stepDashboard" class="hidden">
+            <div class="step" style="text-align:center">
+              <h3 id="welcomeName">Olá!</h3>
+              <p>O teu acesso foi validado. Consulta o resultado do sorteio nesta área.</p>
+              <div id="giftContainer"><button class="btn btn-gold" type="button" onclick="openGift()">🎁 Consultar o meu Amigo Secreto</button></div>
+              <div id="giftResult" class="gift-card hidden">
+                <div class="small">A pessoa a quem vais oferecer um presente é</div>
+                <h3 id="assignedName"></h3>
+                <div id="targetWishlist" class="wishlist"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="viewAdmin" class="content hidden">
+        <div class="section-head">
+          <div class="section-kicker">Gestão do evento</div>
+          <h2>Painel de administração.</h2>
+          <p class="sub">Configura o evento, acompanha as inscrições e gere o sorteio.</p>
+          <span id="adminStatusBadge" class="admin-status">A carregar estado…</span>
+        </div>
+        <div class="admin-grid">
+          <div class="admin-card">
+            <h3>Configurações do evento</h3>
+            <div class="field"><label for="cfgName">Nome do evento</label><input id="cfgName" type="text" value="Chocomigo"></div>
+            <div class="field"><label for="cfgEventDate">Data e hora</label><input id="cfgEventDate" type="text" value="12/12/2026 19:30"></div>
+            <div class="field"><label for="cfgBudget">Orçamento (€)</label><input id="cfgBudget" type="number" min="0" step="0.01" value="20"></div>
+            <div class="field"><label for="cfgDeadline">Fim das inscrições</label><input id="cfgDeadline" type="date" value="2026-11-28"></div>
+            <button class="btn btn-primary" type="button" onclick="saveConfig()">Guardar configurações</button>
+          </div>
+          <div class="admin-card">
+            <h3>Controlos do sorteio</h3>
+            <p class="sub" style="margin-bottom:16px">As ações de sorteio e reposição alteram o estado do evento para todos os participantes.</p>
+            <div class="admin-actions">
+              <button class="btn btn-soft" type="button" onclick="setStatus('open')">Abrir inscrições</button>
+              <button class="btn btn-soft" type="button" onclick="setStatus('closed')">Fechar inscrições</button>
+              <button class="btn btn-gold" type="button" onclick="triggerDraw()">Executar sorteio</button>
+              <button class="btn btn-danger" type="button" onclick="resetEvent()">Repor evento</button>
+            </div>
+            <p class="notice">A reposição pode apagar os resultados existentes. Confirma sempre a operação antes de avançar.</p>
+          </div>
+          <div class="admin-card" style="grid-column:1/-1">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+              <h3 style="margin:0">Participantes inscritos</h3>
+              <button class="btn btn-soft" type="button" onclick="loadParticipants()">Atualizar lista</button>
+            </div>
+            <div id="participantsList" class="participants"><div style="padding:20px;text-align:center;color:#879189;font-size:12px">A carregar participantes…</div></div>
+            <p class="notice">Estado: lista de desejos preenchida e resultado consultado.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>Feito para partilhar o espírito de Natal. <strong>Chocomigo</strong> · <span id="footerDate">12/12/2026 19:30</span></footer>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    "use strict";
+    const API = "https://script.google.com/macros/s/AKfycbyYz3ln24RS22cXQK2zh4bH2dJJVmPcBA6THyfKTdsZme0vZOu65e9UQjen5rLPCYH2/exec";
+    let currentId = null, email = "", clickCount = 0, clickResetTimer = null;
+    let deadline = new Date("2026-11-28T23:59:59"), eventDate = "12/12/2026 19:30", budget = "20", status = "open";
+    const $ = id => document.getElementById(id);
+    const safeText = value => String(value ?? "");
+    function notify(message){const toast=$("toast");toast.textContent=message;toast.classList.add("show");clearTimeout(notify.timer);notify.timer=setTimeout(()=>toast.classList.remove("show"),3200)}
+    async function apiRequest(url, options={}){
+      const response=await fetch(url,options);
+      if(!response.ok) throw new Error(`Erro HTTP ${response.status}`);
+      return response.json();
     }
-  }
-
-  async function saveConfig() {
-    const payload = {
-      action: 'updateConfig',
-      event_name: document.getElementById('cfgName').value.trim(),
-      event_date: document.getElementById('cfgEventDate').value.trim(),
-      budget_limit: document.getElementById('cfgBudget').value,
-      registration_deadline: document.getElementById('cfgDeadline').value
-    };
-
-    try {
-      const res = await fetch(API, {
-        method: 'POST',
-        body: JSON.stringify(payload)
-      });
-      const d = await res.json();
-
-      if (d.success) {
-        alert('Configurações guardadas com sucesso!');
-        await loadConfig(); // recarrega tudo formatado
-      } else {
-        alert(d.error || 'Erro ao guardar configurações');
-      }
-    } catch (err) {
-      alert('Erro de comunicação com o servidor');
+    function post(payload){return apiRequest(API,{method:"POST",body:JSON.stringify(payload)});}
+    function isOpen(){return status!=="drawn" && status!=="closed" && new Date()<=deadline;}
+    function setText(id,value){const el=$(id);if(el)el.textContent=safeText(value)}
+    async function loadConfig(){
+      try{
+        const d=await apiRequest(`${API}?action=getConfig`);
+        if(d.registration_deadline){const parsed=new Date(`${d.registration_deadline}T23:59:59`);if(!Number.isNaN(parsed.getTime()))deadline=parsed}
+        eventDate=d.event_date||"12/12/2026 19:30";budget=d.budget_limit||"20";status=d.status||"open";
+        setText("siteTitle",(d.event_name||"Chocomigo").toUpperCase());setText("headerDate",eventDate);setText("footerDate",eventDate);setText("eventDateDisplay",eventDate);setText("budgetDisplay",`${budget} €`);setText("deadlineText",deadline.toLocaleDateString("pt-PT"));
+        $("cfgName").value=d.event_name||"Chocomigo";$("cfgEventDate").value=eventDate;$("cfgBudget").value=budget;$("cfgDeadline").value=d.registration_deadline||"2026-11-28";
+        updateUI();updateCountdown();
+      }catch(error){console.error("Erro ao carregar configurações:",error);notify("Não foi possível carregar as configurações do evento.")}
     }
-  }
-
-  function updateUI() {
-    const form = document.getElementById('registerForm');
-    const closed = document.getElementById('registrationClosed');
-    const badge = document.getElementById('phaseBadge');
-    const countdown = document.getElementById('countdownSection');
-    const login = document.getElementById('loginSection');
-    const statusBadge = document.getElementById('adminStatusBadge');
-
-    if (status === 'drawn') {
-      form.classList.add('hidden');
-      closed.classList.remove('hidden');
-      badge.textContent = '🔒 Sorteio Realizado';
-      badge.className = 'inline-block bg-red-500/15 text-red-300 border border-red-500/30 text-xs px-3 py-1.5 rounded-full font-semibold';
-      countdown.classList.add('hidden');
-      login.classList.remove('hidden');
-      if (statusBadge) {
-        statusBadge.textContent = 'SORTEIO FEITO';
-        statusBadge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-red-500/20 text-red-300';
-      }
-    } else if (isOpen()) {
-      form.classList.remove('hidden');
-      closed.classList.add('hidden');
-      badge.textContent = '🎄 Inscrições Abertas';
-      badge.className = 'inline-block bg-amber-500/15 text-amber-300 border border-amber-500/30 text-xs px-3 py-1.5 rounded-full font-semibold';
-      countdown.classList.remove('hidden');
-      login.classList.add('hidden');
-      if (statusBadge) {
-        statusBadge.textContent = 'INSCRIÇÕES ABERTAS';
-        statusBadge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300';
-      }
-    } else {
-      form.classList.add('hidden');
-      closed.classList.remove('hidden');
-      badge.textContent = '🔒 Inscrições Encerradas';
-      badge.className = 'inline-block bg-red-500/15 text-red-300 border border-red-500/30 text-xs px-3 py-1.5 rounded-full font-semibold';
-      countdown.classList.add('hidden');
-      login.classList.remove('hidden');
-      if (statusBadge) {
-        statusBadge.textContent = 'INSCRIÇÕES FECHADAS';
-        statusBadge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300';
-      }
+    async function saveConfig(){
+      const payload={action:"updateConfig",event_name:$("cfgName").value.trim(),event_date:$("cfgEventDate").value.trim(),budget_limit:$("cfgBudget").value,registration_deadline:$("cfgDeadline").value};
+      if(!payload.event_name||!payload.event_date||!payload.registration_deadline){notify("Preenche todos os campos das configurações.");return}
+      try{const d=await post(payload);if(d.success){notify("Configurações guardadas.");await loadConfig()}else notify(d.error||"Não foi possível guardar as configurações.")}
+      catch(error){console.error(error);notify("Erro de comunicação com o servidor.")}
     }
-  }
-
-  function updateCountdown() {
-    const dist = deadline - new Date();
-    if (dist < 0) {
-      ['days', 'hours', 'minutes', 'seconds'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.textContent = '00';
-      });
-      updateUI();
-      return;
+    function updateUI(){
+      const badge=$("phaseBadge"),form=$("registerForm"),closed=$("registrationClosed"),countdown=$("countdownSection"),login=$("loginSection");
+      const open=isOpen();
+      if(status==="drawn"){form.classList.add("hidden");closed.classList.remove("hidden");countdown.classList.add("hidden");login.classList.remove("hidden");badge.className="status closed";badge.innerHTML='<span class="status-dot"></span> Sorteio realizado';setText("adminStatusBadge","SORTEIO REALIZADO")}
+      else if(open){form.classList.remove("hidden");closed.classList.add("hidden");countdown.classList.remove("hidden");login.classList.add("hidden");badge.className="status open";badge.innerHTML='<span class="status-dot"></span> Inscrições abertas';setText("adminStatusBadge","INSCRIÇÕES ABERTAS")}
+      else{form.classList.add("hidden");closed.classList.remove("hidden");countdown.classList.add("hidden");login.classList.remove("hidden");badge.className="status closed";badge.innerHTML='<span class="status-dot"></span> Inscrições encerradas';setText("adminStatusBadge","INSCRIÇÕES ENCERRADAS")}
     }
-    document.getElementById('days').textContent = String(Math.floor(dist / 86400000)).padStart(2, '0');
-    document.getElementById('hours').textContent = String(Math.floor((dist % 86400000) / 3600000)).padStart(2, '0');
-    document.getElementById('minutes').textContent = String(Math.floor((dist % 3600000) / 60000)).padStart(2, '0');
-    document.getElementById('seconds').textContent = String(Math.floor((dist % 60000) / 1000)).padStart(2, '0');
-  }
-
-  // ===== ADMIN =====
-  async function setStatus(s) {
-    const res = await fetch(API, {
-      method: 'POST',
-      body: JSON.stringify({ action: 'updateConfig', status: s })
-    });
-    const d = await res.json();
-    if (d.success) {
-      alert('Status atualizado!');
-      await loadConfig();
-    } else {
-      alert(d.error || 'Erro');
+    function updateCountdown(){
+      const distance=deadline-new Date();
+      if(distance<=0){["days","hours","minutes","seconds"].forEach(id=>setText(id,"00"));if(status==="open")updateUI();return}
+      setText("days",String(Math.floor(distance/86400000)).padStart(2,"0"));
+      setText("hours",String(Math.floor(distance%86400000/3600000)).padStart(2,"0"));
+      setText("minutes",String(Math.floor(distance%3600000/60000)).padStart(2,"0"));
+      setText("seconds",String(Math.floor(distance%60000/1000)).padStart(2,"0"));
     }
-  }
-
-  async function resetEvent() {
-    if (!confirm('Isto vai APAGAR o sorteio e reabrir as inscrições. Continuar?')) return;
-    const res = await fetch(API, {
-      method: 'POST',
-      body: JSON.stringify({ action: 'resetEvent' })
-    });
-    const d = await res.json();
-    if (d.success) {
-      alert(d.message);
-      await loadConfig();
-      loadParticipants();
-    } else {
-      alert(d.error || 'Erro');
+    async function setStatus(nextStatus){
+      try{const d=await post({action:"updateConfig",status:nextStatus});if(d.success){notify("Estado do evento atualizado.");await loadConfig()}else notify(d.error||"Não foi possível atualizar o estado.")}
+      catch(error){console.error(error);notify("Erro de comunicação com o servidor.")}
     }
-  }
-
-  async function triggerDraw() {
-    if (!confirm('Realizar o sorteio agora?')) return;
-    const res = await fetch(API, {
-      method: 'POST',
-      body: JSON.stringify({ action: 'executeDraw' })
-    });
-    const d = await res.json();
-    if (d.success) {
-      alert(d.message);
-      await loadConfig();
-      loadParticipants();
-    } else {
-      alert(d.error || 'Erro ao realizar sorteio');
+    async function resetEvent(){
+      if(!confirm("Esta operação vai repor o evento, apagar o sorteio e reabrir as inscrições. Queres continuar?"))return;
+      try{const d=await post({action:"resetEvent"});if(d.success){notify(d.message||"Evento reposto.");await loadConfig();await loadParticipants()}else notify(d.error||"Não foi possível repor o evento.")}
+      catch(error){console.error(error);notify("Erro ao repor o evento.")}
     }
-  }
-
-  async function loadParticipants() {
-    const box = document.getElementById('participantsList');
-    if (!box) return;
-    box.innerHTML = '<div class="p-4 text-center text-emerald-500">A carregar...</div>';
-    try {
-      const res = await fetch(`${API}?action=getParticipants`);
-      const list = await res.json();
-      if (!Array.isArray(list) || list.length === 0) {
-        box.innerHTML = '<div class="p-4 text-center text-emerald-500">Nenhum participante</div>';
-        return;
-      }
-      let html = `
-        <div class="grid grid-cols-12 gap-2 px-3 py-2 text-[10px] uppercase text-emerald-500 border-b border-emerald-800 bg-emerald-950/70 sticky top-0">
-          <div class="col-span-5">Nome</div>
-          <div class="col-span-5">E-mail</div>
-          <div class="col-span-2 text-center">Estado</div>
-        </div>`;
-      list.forEach(p => {
-        html += `
-          <div class="grid grid-cols-12 gap-2 px-3 py-2.5 border-b border-emerald-900/50 text-xs">
-            <div class="col-span-5 text-amber-200 truncate">${p.name || '—'}</div>
-            <div class="col-span-5 text-emerald-300 truncate">${p.email}</div>
-            <div class="col-span-2 text-center">${p.wishlist_completed ? '✅' : '⏳'} ${p.result_viewed ? '👁️' : ''}</div>
-          </div>`;
-      });
-      box.innerHTML = html;
-    } catch (e) {
-      box.innerHTML = '<div class="p-4 text-center text-red-400">Erro ao carregar</div>';
+    async function triggerDraw(){
+      if(!confirm("Queres executar o sorteio agora? Confirma que todas as inscrições estão concluídas."))return;
+      try{const d=await post({action:"executeDraw"});if(d.success){notify(d.message||"Sorteio realizado.");await loadConfig();await loadParticipants()}else notify(d.error||"Erro ao realizar o sorteio.")}
+      catch(error){console.error(error);notify("Erro de comunicação ao executar o sorteio.")}
     }
-  }
-
-  // ===== PARTICIPANTE =====
-  async function register(e) {
-    e.preventDefault();
-    if (!isOpen()) {
-      alert('Inscrições encerradas.');
-      return;
+    function addCell(row,text,className=""){
+      const cell=document.createElement("div");cell.className=className;cell.textContent=safeText(text);row.appendChild(cell);
     }
-    const res = await fetch(API, {
-      method: 'POST',
-      body: JSON.stringify({
-        action: 'registerSelf',
-        name: document.getElementById('regName').value,
-        email: document.getElementById('regEmail').value,
-        description: document.getElementById('regWishlist').value,
-        reference_link: document.getElementById('regLink').value
-      })
-    });
-    const d = await res.json();
-    if (d.success) {
-      alert('Inscrição feita com sucesso!');
-      e.target.reset();
-      switchTab('portal');
-    } else {
-      alert(d.error || 'Erro na inscrição');
+    async function loadParticipants(){
+      const box=$("participantsList");if(!box)return;
+      box.textContent="A carregar participantes…";
+      try{
+        const list=await apiRequest(`${API}?action=getParticipants`);box.replaceChildren();
+        if(!Array.isArray(list)||list.length===0){box.textContent="Ainda não existem participantes inscritos.";return}
+        const header=document.createElement("div");header.className="participant-row head";
+        ["Nome","E-mail","Estado"].forEach(value=>addCell(header,value));box.appendChild(header);
+        list.forEach(person=>{
+          const row=document.createElement("div");row.className="participant-row";
+          addCell(row,person.name||"Sem nome","participant-name");addCell(row,person.email||"Sem e-mail","participant-email");
+          addCell(row,`${person.wishlist_completed?"✓":"○"} Lista · ${person.result_viewed?"✓":"○"} Resultado`,"participant-state");box.appendChild(row);
+        });
+      }catch(error){console.error(error);box.textContent="Não foi possível carregar a lista de participantes."}
     }
-  }
-
-  async function requestOtp(e) {
-    e.preventDefault();
-    email = document.getElementById('loginEmail').value;
-    const res = await fetch(API, {
-      method: 'POST',
-      body: JSON.stringify({ action: 'requestOtp', email })
-    });
-    const d = await res.json();
-    if (d.success) {
-      document.getElementById('codeSentText').textContent = `Código enviado para ${email}`;
-      document.getElementById('stepEmail').classList.add('hidden');
-      document.getElementById('stepCode').classList.remove('hidden');
-    } else {
-      alert(d.error || 'Erro');
+    async function register(event){
+      event.preventDefault();if(!isOpen()){notify("As inscrições estão encerradas.");updateUI();return}
+      const name=$("regName").value.trim(),address=$("regEmail").value.trim(),link=$("regLink").value.trim();
+      if(link){try{const parsed=new URL(link);if(!["http:","https:"].includes(parsed.protocol))throw new Error()}catch{notify("Insere um link válido, iniciado por https://");return}}
+      try{
+        const d=await post({action:"registerSelf",name,email:address,description:$("regWishlist").value.trim(),reference_link:link});
+        if(d.success){notify("Inscrição concluída com sucesso.");event.target.reset();switchTab("portal");$("loginEmail").value=address}
+        else notify(d.error||"Não foi possível concluir a inscrição.");
+      }catch(error){console.error(error);notify("Erro de comunicação durante a inscrição.")}
     }
-  }
-
-  async function verifyOtp(e) {
-    e.preventDefault();
-    const code = document.getElementById('loginCode').value;
-    const res = await fetch(API, {
-      method: 'POST',
-      body: JSON.stringify({ action: 'verifyOtp', email, code })
-    });
-    const d = await res.json();
-    if (d.success) {
-      currentId = d.participant_id;
-      document.getElementById('welcomeName').textContent = `Olá, ${d.name}!`;
-      document.getElementById('stepCode').classList.add('hidden');
-      document.getElementById('stepDashboard').classList.remove('hidden');
-    } else {
-      alert(d.error || 'Código inválido');
+    async function requestOtp(event){
+      event.preventDefault();email=$("loginEmail").value.trim();
+      try{const d=await post({action:"requestOtp",email});if(d.success){setText("codeSentText",`Enviámos um código de acesso para ${email}.`);$("stepEmail").classList.add("hidden");$("stepCode").classList.remove("hidden");$("loginCode").focus()}else notify(d.error||"Não foi possível enviar o código.")}
+      catch(error){console.error(error);notify("Erro ao pedir o código de acesso.")}
     }
-  }
-
-  async function openGift() {
-    const res = await fetch(`${API}?action=getResult&id=${currentId}`);
-    const d = await res.json();
-    if (d.assigned_name) {
-      document.getElementById('giftContainer').classList.add('hidden');
-      document.getElementById('giftResult').classList.remove('hidden');
-      document.getElementById('assignedName').textContent = d.assigned_name;
-      document.getElementById('targetWishlist').innerHTML = `
-        <p class="text-amber-300 font-bold mb-1">Lista de Desejos:</p>
-        <p class="text-slate-200 mb-2">${d.description}</p>
-        ${d.reference_link ? `<a href="${d.reference_link}" target="_blank" class="text-amber-300 underline text-xs">🔗 Ver link</a>` : ''}`;
-    } else {
-      alert(d.error || 'Sorteio ainda não realizado');
+    async function verifyOtp(event){
+      event.preventDefault();const code=$("loginCode").value.trim();
+      try{const d=await post({action:"verifyOtp",email,code});if(d.success){currentId=d.participant_id;setText("welcomeName",`Olá, ${d.name||"participante"}!`);$("stepCode").classList.add("hidden");$("stepDashboard").classList.remove("hidden")}else notify(d.error||"Código inválido ou expirado.")}
+      catch(error){console.error(error);notify("Erro ao validar o código.")}
     }
-  }
-
-  // ===== NAVEGAÇÃO =====
-  function switchTab(t) {
-    ['register', 'portal', 'admin'].forEach(v => {
-      const view = document.getElementById('view' + v.charAt(0).toUpperCase() + v.slice(1));
-      const tab = document.getElementById('tab' + v.charAt(0).toUpperCase() + v.slice(1));
-      if (view) view.classList.add('hidden');
-      if (tab) tab.className = 'px-4 py-2 rounded-lg text-xs font-bold text-emerald-200';
-    });
-    const activeView = document.getElementById('view' + t.charAt(0).toUpperCase() + t.slice(1));
-    const activeTab = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
-    if (activeView) activeView.classList.remove('hidden');
-    if (activeTab) activeTab.className = 'px-4 py-2 rounded-lg text-xs font-bold tab-active';
-    if (t === 'admin') loadParticipants();
-  }
-
-  function secretAdmin() {
-    clickCount++;
-    if (clickCount >= 5) {
-      const tab = document.getElementById('tabAdmin');
-      if (tab) {
-        tab.style.display = (tab.style.display === 'none' || !tab.style.display) ? 'inline-block' : 'none';
-        if (tab.style.display !== 'none') loadParticipants();
-      }
-      clickCount = 0;
+    async function openGift(){
+      if(!currentId){notify("Valida primeiro o teu acesso.");return}
+      try{
+        const d=await apiRequest(`${API}?action=getResult&id=${encodeURIComponent(currentId)}`);
+        if(d.assigned_name){
+          $("giftContainer").classList.add("hidden");$("giftResult").classList.remove("hidden");setText("assignedName",d.assigned_name);
+          const target=$("targetWishlist");target.replaceChildren();
+          const title=document.createElement("strong");title.textContent="Lista de desejos";target.appendChild(title);
+          const description=document.createElement("p");description.textContent=d.description||"Não foram indicadas sugestões.";target.appendChild(description);
+          if(d.reference_link){try{const url=new URL(d.reference_link);if(["http:","https:"].includes(url.protocol)){const anchor=document.createElement("a");anchor.href=url.href;anchor.target="_blank";anchor.rel="noopener noreferrer";anchor.textContent="↗ Consultar link de referência";target.appendChild(anchor)}}catch{}}
+        }else notify(d.error||"O sorteio ainda não foi realizado.");
+      }catch(error){console.error(error);notify("Não foi possível consultar o resultado.")}
     }
-    setTimeout(() => clickCount = 0, 2000);
-  }
-
-  function createSnow() {
-    const c = document.getElementById('snow');
-    if (!c) return;
-    for (let i = 0; i < 25; i++) {
-      const f = document.createElement('div');
-      f.className = 'snowflake';
-      f.textContent = ['❄', '❅', '❆', '•'][Math.floor(Math.random() * 4)];
-      f.style.left = Math.random() * 100 + 'vw';
-      f.style.animationDuration = (7 + Math.random() * 8) + 's';
-      f.style.animationDelay = Math.random() * 10 + 's';
-      f.style.fontSize = (0.5 + Math.random() * 0.7) + 'rem';
-      c.appendChild(f);
+    function switchTab(tabName){
+      ["register","portal","admin"].forEach(name=>{$("view"+name[0].toUpperCase()+name.slice(1)).classList.add("hidden");const tab=$("tab"+name[0].toUpperCase()+name.slice(1));tab.classList.remove("active")});
+      $("view"+tabName[0].toUpperCase()+tabName.slice(1)).classList.remove("hidden");$("tab"+tabName[0].toUpperCase()+tabName.slice(1)).classList.add("active");
+      if(tabName==="admin")loadParticipants();
     }
-  }
-
-  // ===== INICIALIZAÇÃO =====
-  document.addEventListener('DOMContentLoaded', () => {
-    createSnow();
-    loadConfig();
-    setInterval(updateCountdown, 1000);
-  });
-</script>
+    function secretAdmin(){
+      clickCount++;clearTimeout(clickResetTimer);clickResetTimer=setTimeout(()=>clickCount=0,2200);
+      if(clickCount>=5){const tab=$("tabAdmin");tab.classList.toggle("hidden");tab.style.display=tab.classList.contains("hidden")?"none":"inline-block";clickCount=0;if(!tab.classList.contains("hidden"))loadParticipants()}
+    }
+    function createSnow(){
+      const container=$("snow");if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+      for(let i=0;i<24;i++){const flake=document.createElement("span");flake.className="snowflake";flake.textContent=["❄","❅","❆","·"][Math.floor(Math.random()*4)];flake.style.left=`${Math.random()*100}vw`;flake.style.animationDuration=`${8+Math.random()*9}s`;flake.style.animationDelay=`${Math.random()*-15}s`;flake.style.fontSize=`${.55+Math.random()*.7}rem`;container.appendChild(flake)}
+    }
+    document.addEventListener("DOMContentLoaded",()=>{createSnow();$("siteTitle").addEventListener("click",secretAdmin);loadConfig();updateCountdown();setInterval(updateCountdown,1000)});
+  </script>
+</body>
+</html>
