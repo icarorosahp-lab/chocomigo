@@ -1,470 +1,341 @@
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chocomigo</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap');
-    body { font-family: 'Inter', system-ui, sans-serif; background: radial-gradient(ellipse at top, #0f3d2e 0%, #022c22 40%, #011611 100%); min-height: 100vh; }
-    h1, h2, h3 { font-family: 'Playfair Display', serif; }
-    .glass { background: linear-gradient(145deg, rgba(6,78,59,0.55), rgba(2,44,34,0.7)); backdrop-filter: blur(16px); border: 1px solid rgba(16,185,129,0.25); }
-    .btn-gold { background: linear-gradient(135deg, #f5c542, #eab308); color: #022c22; }
-    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(245,197,66,0.4); }
-    .btn-red { background: linear-gradient(135deg, #dc2626, #b91c1c); }
-    .btn-red:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(185,28,28,0.45); }
-    .tab-active { background: linear-gradient(135deg, #f5c542, #eab308); color: #022c22; }
-    .snowflake { position: fixed; top: -10px; color: rgba(255,255,255,0.7); pointer-events: none; z-index: 50; animation: fall linear infinite; }
-    @keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate(360deg); opacity: 0.3; } }
-    @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-    .animate-gift { animation: bounce 2.2s infinite ease-in-out; }
-  </style>
-</head>
-<body class="text-slate-100 min-h-screen flex flex-col">
+<script>
+  const API = "https://script.google.com/macros/s/AKfycbxgbfGrrF9TwRZ0R5KS8-gGnFzVH8vXTikEheMZRU3BITlc5J-3_Oh_WhrOEHXQJSKs/exec"; // ← confirma se este é o URL atual
+  let currentId = null;
+  let email = "";
+  let clickCount = 0;
+  let deadline = new Date('2026-11-28T23:59:59');
+  let eventDate = '12/12/2026 19:30';
+  let budget = '20';
+  let status = 'open';
 
-  <div id="snow"></div>
+  // ===== UTIL =====
+  function isOpen() {
+    return new Date() <= deadline && status !== 'drawn';
+  }
 
-  <!-- HEADER -->
-  <header class="p-4 md:p-6 max-w-5xl mx-auto w-full">
-    <div class="glass rounded-2xl px-5 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-      <div class="flex items-center gap-3 cursor-pointer" onclick="secretAdmin()">
-        <span class="text-4xl">🍫</span>
-        <div>
-          <h1 class="text-2xl md:text-3xl font-bold text-amber-300" id="siteTitle">CHOCOMIGO</h1>
-          <p class="text-xs text-emerald-300">Troca de Presentes • <span id="headerDate">12/12/2026</span></p>
-        </div>
-      </div>
-      <div class="flex gap-1.5 bg-emerald-950/60 p-1.5 rounded-xl">
-        <button onclick="switchTab('register')" id="tabRegister" class="px-4 py-2 rounded-lg text-xs font-bold tab-active">1. Inscrever-se</button>
-        <button onclick="switchTab('portal')" id="tabPortal" class="px-4 py-2 rounded-lg text-xs font-bold text-emerald-200">2. Ver Sorteio</button>
-        <button onclick="switchTab('admin')" id="tabAdmin" class="px-4 py-2 rounded-lg text-xs font-bold text-emerald-200" style="display:none">⚙️ Admin</button>
-      </div>
-    </div>
-  </header>
-
-  <main class="flex-1 max-w-xl mx-auto w-full px-4 py-6">
-
-    <!-- ================= INSCRIÇÃO ================= -->
-    <div id="viewRegister" class="glass p-7 md:p-9 rounded-3xl shadow-2xl">
-      <div class="text-center mb-6">
-        <span id="phaseBadge" class="inline-block bg-amber-500/15 text-amber-300 border border-amber-500/30 text-xs px-3 py-1.5 rounded-full font-semibold">🎄 Inscrições Abertas</span>
-        <h2 class="text-2xl md:text-3xl font-bold text-amber-300 mt-4">Inscreve-te no Chocomigo!</h2>
-        <p class="text-emerald-200/90 text-sm mt-2">Até <b id="deadlineText" class="text-amber-300">28/11/2026</b></p>
-      </div>
-
-      <form id="registerForm" onsubmit="register(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs font-semibold text-emerald-300 mb-1">Nome Completo</label>
-          <input id="regName" required class="w-full bg-emerald-950/80 text-white px-4 py-3 rounded-xl border border-emerald-700/60 text-sm">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-emerald-300 mb-1">E-mail</label>
-          <input id="regEmail" type="email" required class="w-full bg-emerald-950/80 text-white px-4 py-3 rounded-xl border border-emerald-700/60 text-sm">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-emerald-300 mb-1">Lista de Desejos 🍫</label>
-          <textarea id="regWishlist" required class="w-full bg-emerald-950/80 text-white p-3 rounded-xl border border-emerald-700/60 text-sm h-28 resize-none"></textarea>
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-emerald-300 mb-1">Link (opcional)</label>
-          <input id="regLink" type="url" class="w-full bg-emerald-950/80 text-white px-4 py-3 rounded-xl border border-emerald-700/60 text-sm">
-        </div>
-        <button type="submit" class="w-full btn-gold font-bold py-3.5 rounded-xl text-sm">Concluir Inscrição 🚀</button>
-      </form>
-
-      <div id="registrationClosed" class="hidden text-center py-8">
-        <div class="text-5xl mb-4">🔒</div>
-        <h3 class="text-xl font-bold text-amber-300">Inscrições Encerradas</h3>
-        <p class="text-emerald-200/90 text-sm mt-2">O sorteio será realizado em breve.</p>
-        <button onclick="switchTab('portal')" class="mt-6 btn-gold font-bold px-6 py-3 rounded-xl text-sm">Ir para Área do Participante</button>
-      </div>
-    </div>
-
-    <!-- ================= PORTAL ================= -->
-    <div id="viewPortal" class="hidden glass p-7 md:p-9 rounded-3xl shadow-2xl">
-      <div id="countdownSection" class="text-center py-4">
-        <div class="text-5xl mb-4">⏳</div>
-        <h2 class="text-2xl font-bold text-amber-300">Ainda não é altura...</h2>
-        <p class="text-emerald-200/90 text-sm mt-2 mb-6">O sorteio só abre depois do prazo das inscrições</p>
-        <div class="flex justify-center gap-3 mb-6">
-          <div class="bg-emerald-950/70 border border-emerald-700/50 rounded-2xl px-4 py-3 min-w-[70px]">
-            <div id="days" class="text-3xl font-bold text-amber-300">00</div>
-            <div class="text-[10px] text-emerald-400">DIAS</div>
-          </div>
-          <div class="bg-emerald-950/70 border border-emerald-700/50 rounded-2xl px-4 py-3 min-w-[70px]">
-            <div id="hours" class="text-3xl font-bold text-amber-300">00</div>
-            <div class="text-[10px] text-emerald-400">HORAS</div>
-          </div>
-          <div class="bg-emerald-950/70 border border-emerald-700/50 rounded-2xl px-4 py-3 min-w-[70px]">
-            <div id="minutes" class="text-3xl font-bold text-amber-300">00</div>
-            <div class="text-[10px] text-emerald-400">MIN</div>
-          </div>
-          <div class="bg-emerald-950/70 border border-emerald-700/50 rounded-2xl px-4 py-3 min-w-[70px]">
-            <div id="seconds" class="text-3xl font-bold text-amber-300">00</div>
-            <div class="text-[10px] text-emerald-400">SEG</div>
-          </div>
-        </div>
-      </div>
-
-      <div id="loginSection" class="hidden">
-        <div id="stepEmail">
-          <h2 class="text-2xl font-bold text-amber-300 text-center mb-2">Área do Participante</h2>
-          <p class="text-emerald-200/90 text-sm text-center mb-6">Insere o teu e-mail para receberes o código</p>
-          <form onsubmit="requestOtp(event)" class="space-y-4">
-            <input id="loginEmail" type="email" required placeholder="O teu e-mail registado" class="w-full bg-emerald-950/80 text-white px-4 py-3.5 rounded-xl border border-emerald-700/60">
-            <button type="submit" class="w-full btn-gold font-bold py-3.5 rounded-xl">Receber Código</button>
-          </form>
-        </div>
-
-        <div id="stepCode" class="hidden">
-          <h2 class="text-2xl font-bold text-amber-300 text-center mb-2">Verificar Código</h2>
-          <p id="codeSentText" class="text-emerald-200/90 text-sm text-center mb-6"></p>
-          <form onsubmit="verifyOtp(event)" class="space-y-4">
-            <input id="loginCode" maxlength="6" required placeholder="123456" class="w-full text-center tracking-[0.4em] text-2xl font-semibold bg-emerald-950/80 text-amber-300 px-4 py-4 rounded-xl border border-emerald-700/60">
-            <button type="submit" class="w-full btn-gold font-bold py-3.5 rounded-xl">Entrar</button>
-          </form>
-        </div>
-
-        <div id="stepDashboard" class="hidden space-y-6">
-          <div class="text-center border-b border-emerald-700/40 pb-4">
-            <h2 class="text-3xl font-bold text-amber-300" id="welcomeName">Olá!</h2>
-            <p class="text-emerald-200/90 text-sm mt-1">Orçamento: <b id="budgetDisplay" class="text-amber-300">20 €</b> • Troca: <b id="eventDateDisplay">12/12/2026</b></p>
-          </div>
-
-          <div id="giftContainer" class="text-center">
-            <p class="text-emerald-200/90 text-sm mb-6">Clica na caixa para descobrir o teu Amigo Secreto:</p>
-            <div onclick="openGift()" class="cursor-pointer inline-block animate-gift hover:scale-105 transition">
-              <div class="relative w-40 h-40 bg-gradient-to-br from-red-600 to-red-800 rounded-2xl shadow-2xl border-4 border-amber-400 flex items-center justify-center mx-auto">
-                <div class="absolute inset-y-0 w-9 bg-amber-400/90"></div>
-                <div class="absolute inset-x-0 h-9 bg-amber-400/90"></div>
-                <span class="relative z-10 text-white font-bold text-sm">Abrir Presente</span>
-              </div>
-            </div>
-          </div>
-
-          <div id="giftResult" class="hidden bg-gradient-to-b from-red-950/90 to-emerald-950/80 border-2 border-amber-400/80 p-6 rounded-2xl text-center">
-            <div class="text-4xl mb-3">🎉🎄✨</div>
-            <p class="text-xs text-emerald-300 uppercase tracking-widest">Tiraste a:</p>
-            <h3 class="text-3xl font-bold text-amber-300 my-2" id="assignedName">...</h3>
-            <div id="targetWishlist" class="mt-4 p-4 bg-emerald-900/60 rounded-xl text-left text-sm"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ================= ADMIN (ORGANIZADO) ================= -->
-    <div id="viewAdmin" class="hidden glass p-6 md:p-8 rounded-3xl shadow-2xl space-y-6">
-      <div class="text-center">
-        <h2 class="text-2xl font-bold text-amber-300">Painel do Organizador</h2>
-        <p class="text-emerald-400 text-sm mt-1">Tudo editável e organizado</p>
-      </div>
-
-      <!-- ESTADO -->
-      <div class="bg-emerald-950/50 border border-emerald-700/40 rounded-xl p-4">
-        <div class="flex items-center justify-between mb-3">
-          <span class="text-xs uppercase tracking-wider text-emerald-400">Estado atual</span>
-          <span id="adminStatusBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300">—</span>
-        </div>
-        <div class="flex gap-2">
-          <button onclick="setStatus('open')" class="flex-1 py-2.5 rounded-lg text-sm font-bold bg-emerald-700 hover:bg-emerald-600">Reabrir Inscrições</button>
-          <button onclick="resetEvent()" class="flex-1 py-2.5 rounded-lg text-sm font-bold btn-red text-white">Repor Evento</button>
-        </div>
-        <p class="text-[11px] text-emerald-500 mt-2">“Repor Evento” apaga o sorteio e volta a abrir as inscrições.</p>
-      </div>
-
-<!-- CONFIGURAÇÕES -->
-<div class="bg-emerald-950/40 border border-emerald-700/30 rounded-xl p-4 space-y-4">
-  <h3 class="text-sm font-semibold text-emerald-300">Configurações do Evento</h3>
-
-  <div>
-    <label class="block text-xs text-emerald-400 mb-1">Nome do Evento</label>
-    <input id="cfgName" class="w-full bg-emerald-950 text-white px-3 py-2.5 rounded-lg border border-emerald-700 text-sm">
-  </div>
-
-  <div>
-    <label class="block text-xs text-emerald-400 mb-1">Data e Hora da Troca</label>
-    <input id="cfgEventDate" placeholder="Ex: 12/12/2026 19:30" 
-           class="w-full bg-emerald-950 text-white px-3 py-2.5 rounded-lg border border-emerald-700 text-sm">
-    <p class="text-[11px] text-emerald-500 mt-1">Formato recomendado: DD/MM/AAAA HH:MM</p>
-  </div>
-
-  <div class="grid grid-cols-2 gap-3">
-    <div>
-      <label class="block text-xs text-emerald-400 mb-1">Orçamento máximo (€)</label>
-      <input id="cfgBudget" type="number" min="1" class="w-full bg-emerald-950 text-white px-3 py-2.5 rounded-lg border border-emerald-700 text-sm">
-    </div>
-    <div>
-      <label class="block text-xs text-emerald-400 mb-1">Data Limite Inscrições</label>
-      <input id="cfgDeadline" type="date" class="w-full bg-emerald-950 text-white px-3 py-2.5 rounded-lg border border-emerald-700 text-sm">
-    </div>
-  </div>
-
-  <button onclick="saveConfig()" class="w-full btn-gold font-bold py-3 rounded-xl text-sm mt-1">
-    💾 Guardar Configurações
-  </button>
-</div>
-
-      <!-- SORTEIO -->
-      <button onclick="triggerDraw()" class="w-full btn-red text-white font-bold py-3.5 rounded-xl text-sm">
-        🎲 Realizar Sorteio Cego (1 para 1)
-      </button>
-
-      <!-- PARTICIPANTES -->
-      <div>
-        <div class="flex items-center justify-between mb-2">
-          <h3 class="text-sm font-semibold text-emerald-300">Participantes</h3>
-          <button onclick="loadParticipants()" class="text-xs text-amber-400 underline">Atualizar</button>
-        </div>
-        <div id="participantsList" class="bg-emerald-950/50 border border-emerald-700/40 rounded-xl max-h-72 overflow-y-auto text-sm">
-          <div class="p-4 text-center text-emerald-500">A carregar...</div>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <footer class="p-4 text-center text-xs text-emerald-500/60">
-    Chocomigo • <span id="footerDate">12/12/2026</span>
-  </footer>
-
-  <script>
-    const API = "https://script.google.com/macros/s/AKfycbxIhbvDY-y4X_NMHTh_IY8LZ7xQ2X67MP8tahBSSVhZeObclDczxUXuH5rSQulD-_c5/exec";
-    let currentId = null, email = "", clickCount = 0;
-    let deadline = new Date('2026-11-28T23:59:59');
-    let eventDate = '12/12/2026', budget = '20', status = 'open';
-
-    // ===== UTIL =====
-    function isOpen() { return new Date() <= deadline && status !== 'drawn'; }
-
-    async function loadConfig() {
-      try {
-        const res = await fetch(`${API}?action=getConfig`);
-        const d = await res.json();
-        if (d.registration_deadline) deadline = new Date(d.registration_deadline + 'T23:59:59');
-        if (d.event_date) eventDate = d.event_date;
-        if (d.budget_limit) budget = d.budget_limit;
-        if (d.status) status = d.status;
-        if (d.event_name) document.getElementById('siteTitle').textContent = d.event_name.toUpperCase();
-
-        document.getElementById('headerDate').textContent = eventDate;
-        document.getElementById('footerDate').textContent = eventDate;
-        document.getElementById('eventDateDisplay').textContent = eventDate;
-        document.getElementById('budgetDisplay').textContent = budget + ' €';
-        document.getElementById('deadlineText').textContent = deadline.toLocaleDateString('pt-PT');
-
-        // Admin fields
-        document.getElementById('cfgName').value = d.event_name || 'Chocomigo';
-        document.getElementById('cfgEventDate').value = eventDate;
-        document.getElementById('cfgBudget').value = budget;
-        document.getElementById('cfgDeadline').value = d.registration_deadline || '2026-11-28';
-
-        updateUI();
-      } catch(e) { console.error(e); }
-    }
-
-    function updateUI() {
-      const form = document.getElementById('registerForm');
-      const closed = document.getElementById('registrationClosed');
-      const badge = document.getElementById('phaseBadge');
-      const countdown = document.getElementById('countdownSection');
-      const login = document.getElementById('loginSection');
-      const statusBadge = document.getElementById('adminStatusBadge');
-
-      if (status === 'drawn') {
-        form.classList.add('hidden'); closed.classList.remove('hidden');
-        badge.textContent = '🔒 Sorteio Realizado'; badge.className = 'inline-block bg-red-500/15 text-red-300 border border-red-500/30 text-xs px-3 py-1.5 rounded-full font-semibold';
-        countdown.classList.add('hidden'); login.classList.remove('hidden');
-        statusBadge.textContent = 'SORTEIO FEITO'; statusBadge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-red-500/20 text-red-300';
-      } else if (isOpen()) {
-        form.classList.remove('hidden'); closed.classList.add('hidden');
-        badge.textContent = '🎄 Inscrições Abertas'; badge.className = 'inline-block bg-amber-500/15 text-amber-300 border border-amber-500/30 text-xs px-3 py-1.5 rounded-full font-semibold';
-        countdown.classList.remove('hidden'); login.classList.add('hidden');
-        statusBadge.textContent = 'INSCRIÇÕES ABERTAS'; statusBadge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300';
-      } else {
-        form.classList.add('hidden'); closed.classList.remove('hidden');
-        badge.textContent = '🔒 Inscrições Encerradas'; badge.className = 'inline-block bg-red-500/15 text-red-300 border border-red-500/30 text-xs px-3 py-1.5 rounded-full font-semibold';
-        countdown.classList.add('hidden'); login.classList.remove('hidden');
-        statusBadge.textContent = 'INSCRIÇÕES FECHADAS'; statusBadge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300';
-      }
-    }
-
-    function updateCountdown() {
-      const dist = deadline - new Date();
-      if (dist < 0) {
-        ['days','hours','minutes','seconds'].forEach(id => document.getElementById(id).textContent = '00');
-        updateUI(); return;
-      }
-      document.getElementById('days').textContent = String(Math.floor(dist / 86400000)).padStart(2,'0');
-      document.getElementById('hours').textContent = String(Math.floor((dist % 86400000) / 3600000)).padStart(2,'0');
-      document.getElementById('minutes').textContent = String(Math.floor((dist % 3600000) / 60000)).padStart(2,'0');
-      document.getElementById('seconds').textContent = String(Math.floor((dist % 60000) / 1000)).padStart(2,'0');
-    }
-
-    // ===== ADMIN =====
-    async function saveConfig() {
-      const payload = {
-        action: 'updateConfig',
-        event_name: document.getElementById('cfgName').value.trim(),
-        event_date: document.getElementById('cfgEventDate').value.trim(),
-        budget_limit: document.getElementById('cfgBudget').value,
-        registration_deadline: document.getElementById('cfgDeadline').value
-      };
-      const res = await fetch(API, { method: 'POST', body: JSON.stringify(payload) });
+  async function loadConfig() {
+    try {
+      const res = await fetch(`${API}?action=getConfig`);
       const d = await res.json();
+
+      // Datas
+      if (d.registration_deadline) {
+        deadline = new Date(d.registration_deadline + 'T23:59:59');
+      }
+      eventDate = d.event_date || '12/12/2026 19:30';
+      budget = d.budget_limit || '20';
+      status = d.status || 'open';
+
+      // Atualizar todo o site
+      document.getElementById('siteTitle').textContent = (d.event_name || 'Chocomigo').toUpperCase();
+      document.getElementById('headerDate').textContent = eventDate;
+      document.getElementById('footerDate').textContent = eventDate;
+      document.getElementById('eventDateDisplay').textContent = eventDate;
+      document.getElementById('budgetDisplay').textContent = budget + ' €';
+      document.getElementById('deadlineText').textContent = deadline.toLocaleDateString('pt-PT');
+
+      // Preencher campos do Admin
+      document.getElementById('cfgName').value = d.event_name || 'Chocomigo';
+      document.getElementById('cfgEventDate').value = eventDate;
+      document.getElementById('cfgBudget').value = budget;
+      document.getElementById('cfgDeadline').value = d.registration_deadline || '2026-11-28';
+
+      updateUI();
+    } catch (e) {
+      console.error('Erro ao carregar config:', e);
+    }
+  }
+
+  async function saveConfig() {
+    const payload = {
+      action: 'updateConfig',
+      event_name: document.getElementById('cfgName').value.trim(),
+      event_date: document.getElementById('cfgEventDate').value.trim(),
+      budget_limit: document.getElementById('cfgBudget').value,
+      registration_deadline: document.getElementById('cfgDeadline').value
+    };
+
+    try {
+      const res = await fetch(API, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      });
+      const d = await res.json();
+
       if (d.success) {
-        alert('Configurações guardadas!');
-        await loadConfig();
-      } else alert(d.error || 'Erro');
+        alert('Configurações guardadas com sucesso!');
+        await loadConfig(); // recarrega tudo formatado
+      } else {
+        alert(d.error || 'Erro ao guardar configurações');
+      }
+    } catch (err) {
+      alert('Erro de comunicação com o servidor');
     }
+  }
 
-    async function setStatus(s) {
-      const res = await fetch(API, { method: 'POST', body: JSON.stringify({ action: 'updateConfig', status: s }) });
-      const d = await res.json();
-      if (d.success) { alert('Status atualizado!'); await loadConfig(); }
-      else alert(d.error);
+  function updateUI() {
+    const form = document.getElementById('registerForm');
+    const closed = document.getElementById('registrationClosed');
+    const badge = document.getElementById('phaseBadge');
+    const countdown = document.getElementById('countdownSection');
+    const login = document.getElementById('loginSection');
+    const statusBadge = document.getElementById('adminStatusBadge');
+
+    if (status === 'drawn') {
+      form.classList.add('hidden');
+      closed.classList.remove('hidden');
+      badge.textContent = '🔒 Sorteio Realizado';
+      badge.className = 'inline-block bg-red-500/15 text-red-300 border border-red-500/30 text-xs px-3 py-1.5 rounded-full font-semibold';
+      countdown.classList.add('hidden');
+      login.classList.remove('hidden');
+      if (statusBadge) {
+        statusBadge.textContent = 'SORTEIO FEITO';
+        statusBadge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-red-500/20 text-red-300';
+      }
+    } else if (isOpen()) {
+      form.classList.remove('hidden');
+      closed.classList.add('hidden');
+      badge.textContent = '🎄 Inscrições Abertas';
+      badge.className = 'inline-block bg-amber-500/15 text-amber-300 border border-amber-500/30 text-xs px-3 py-1.5 rounded-full font-semibold';
+      countdown.classList.remove('hidden');
+      login.classList.add('hidden');
+      if (statusBadge) {
+        statusBadge.textContent = 'INSCRIÇÕES ABERTAS';
+        statusBadge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300';
+      }
+    } else {
+      form.classList.add('hidden');
+      closed.classList.remove('hidden');
+      badge.textContent = '🔒 Inscrições Encerradas';
+      badge.className = 'inline-block bg-red-500/15 text-red-300 border border-red-500/30 text-xs px-3 py-1.5 rounded-full font-semibold';
+      countdown.classList.add('hidden');
+      login.classList.remove('hidden');
+      if (statusBadge) {
+        statusBadge.textContent = 'INSCRIÇÕES FECHADAS';
+        statusBadge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300';
+      }
     }
+  }
 
-    async function resetEvent() {
-      if (!confirm('Isto vai APAGAR o sorteio e reabrir as inscrições. Continuar?')) return;
-      const res = await fetch(API, { method: 'POST', body: JSON.stringify({ action: 'resetEvent' }) });
-      const d = await res.json();
-      if (d.success) { alert(d.message); await loadConfig(); loadParticipants(); }
-      else alert(d.error);
+  function updateCountdown() {
+    const dist = deadline - new Date();
+    if (dist < 0) {
+      ['days', 'hours', 'minutes', 'seconds'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = '00';
+      });
+      updateUI();
+      return;
     }
+    document.getElementById('days').textContent = String(Math.floor(dist / 86400000)).padStart(2, '0');
+    document.getElementById('hours').textContent = String(Math.floor((dist % 86400000) / 3600000)).padStart(2, '0');
+    document.getElementById('minutes').textContent = String(Math.floor((dist % 3600000) / 60000)).padStart(2, '0');
+    document.getElementById('seconds').textContent = String(Math.floor((dist % 60000) / 1000)).padStart(2, '0');
+  }
 
-    async function triggerDraw() {
-      if (!confirm('Realizar o sorteio agora?')) return;
-      const res = await fetch(API, { method: 'POST', body: JSON.stringify({ action: 'executeDraw' }) });
-      const d = await res.json();
-      if (d.success) { alert(d.message); await loadConfig(); loadParticipants(); }
-      else alert(d.error);
+  // ===== ADMIN =====
+  async function setStatus(s) {
+    const res = await fetch(API, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'updateConfig', status: s })
+    });
+    const d = await res.json();
+    if (d.success) {
+      alert('Status atualizado!');
+      await loadConfig();
+    } else {
+      alert(d.error || 'Erro');
     }
+  }
 
-    async function loadParticipants() {
-      const box = document.getElementById('participantsList');
-      box.innerHTML = '<div class="p-4 text-center text-emerald-500">A carregar...</div>';
-      try {
-        const res = await fetch(`${API}?action=getParticipants`);
-        const list = await res.json();
-        if (!Array.isArray(list) || !list.length) {
-          box.innerHTML = '<div class="p-4 text-center text-emerald-500">Nenhum participante</div>';
-          return;
-        }
-        let html = `<div class="grid grid-cols-12 gap-2 px-3 py-2 text-[10px] uppercase text-emerald-500 border-b border-emerald-800 bg-emerald-950/70 sticky top-0">
-          <div class="col-span-5">Nome</div><div class="col-span-5">E-mail</div><div class="col-span-2 text-center">Estado</div></div>`;
-        list.forEach(p => {
-          html += `<div class="grid grid-cols-12 gap-2 px-3 py-2.5 border-b border-emerald-900/50 text-xs">
+  async function resetEvent() {
+    if (!confirm('Isto vai APAGAR o sorteio e reabrir as inscrições. Continuar?')) return;
+    const res = await fetch(API, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'resetEvent' })
+    });
+    const d = await res.json();
+    if (d.success) {
+      alert(d.message);
+      await loadConfig();
+      loadParticipants();
+    } else {
+      alert(d.error || 'Erro');
+    }
+  }
+
+  async function triggerDraw() {
+    if (!confirm('Realizar o sorteio agora?')) return;
+    const res = await fetch(API, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'executeDraw' })
+    });
+    const d = await res.json();
+    if (d.success) {
+      alert(d.message);
+      await loadConfig();
+      loadParticipants();
+    } else {
+      alert(d.error || 'Erro ao realizar sorteio');
+    }
+  }
+
+  async function loadParticipants() {
+    const box = document.getElementById('participantsList');
+    if (!box) return;
+    box.innerHTML = '<div class="p-4 text-center text-emerald-500">A carregar...</div>';
+    try {
+      const res = await fetch(`${API}?action=getParticipants`);
+      const list = await res.json();
+      if (!Array.isArray(list) || list.length === 0) {
+        box.innerHTML = '<div class="p-4 text-center text-emerald-500">Nenhum participante</div>';
+        return;
+      }
+      let html = `
+        <div class="grid grid-cols-12 gap-2 px-3 py-2 text-[10px] uppercase text-emerald-500 border-b border-emerald-800 bg-emerald-950/70 sticky top-0">
+          <div class="col-span-5">Nome</div>
+          <div class="col-span-5">E-mail</div>
+          <div class="col-span-2 text-center">Estado</div>
+        </div>`;
+      list.forEach(p => {
+        html += `
+          <div class="grid grid-cols-12 gap-2 px-3 py-2.5 border-b border-emerald-900/50 text-xs">
             <div class="col-span-5 text-amber-200 truncate">${p.name || '—'}</div>
             <div class="col-span-5 text-emerald-300 truncate">${p.email}</div>
             <div class="col-span-2 text-center">${p.wishlist_completed ? '✅' : '⏳'} ${p.result_viewed ? '👁️' : ''}</div>
           </div>`;
-        });
-        box.innerHTML = html;
-      } catch(e) { box.innerHTML = '<div class="p-4 text-center text-red-400">Erro</div>'; }
-    }
-
-    // ===== PARTICIPANTE =====
-    async function register(e) {
-      e.preventDefault();
-      if (!isOpen()) { alert('Inscrições encerradas.'); return; }
-      const res = await fetch(API, {
-        method: 'POST',
-        body: JSON.stringify({
-          action: 'registerSelf',
-          name: document.getElementById('regName').value,
-          email: document.getElementById('regEmail').value,
-          description: document.getElementById('regWishlist').value,
-          reference_link: document.getElementById('regLink').value
-        })
       });
-      const d = await res.json();
-      if (d.success) {
-        alert('Inscrição feita com sucesso!');
-        e.target.reset();
-        switchTab('portal');
-      } else alert(d.error || 'Erro');
+      box.innerHTML = html;
+    } catch (e) {
+      box.innerHTML = '<div class="p-4 text-center text-red-400">Erro ao carregar</div>';
     }
+  }
 
-    async function requestOtp(e) {
-      e.preventDefault();
-      email = document.getElementById('loginEmail').value;
-      const res = await fetch(API, { method: 'POST', body: JSON.stringify({ action: 'requestOtp', email }) });
-      const d = await res.json();
-      if (d.success) {
-        document.getElementById('codeSentText').textContent = `Código enviado para ${email}`;
-        document.getElementById('stepEmail').classList.add('hidden');
-        document.getElementById('stepCode').classList.remove('hidden');
-      } else alert(d.error);
+  // ===== PARTICIPANTE =====
+  async function register(e) {
+    e.preventDefault();
+    if (!isOpen()) {
+      alert('Inscrições encerradas.');
+      return;
     }
-
-    async function verifyOtp(e) {
-      e.preventDefault();
-      const code = document.getElementById('loginCode').value;
-      const res = await fetch(API, { method: 'POST', body: JSON.stringify({ action: 'verifyOtp', email, code }) });
-      const d = await res.json();
-      if (d.success) {
-        currentId = d.participant_id;
-        document.getElementById('welcomeName').textContent = `Olá, ${d.name}!`;
-        document.getElementById('stepCode').classList.add('hidden');
-        document.getElementById('stepDashboard').classList.remove('hidden');
-      } else alert(d.error);
-    }
-
-    async function openGift() {
-      const res = await fetch(`${API}?action=getResult&id=${currentId}`);
-      const d = await res.json();
-      if (d.assigned_name) {
-        document.getElementById('giftContainer').classList.add('hidden');
-        document.getElementById('giftResult').classList.remove('hidden');
-        document.getElementById('assignedName').textContent = d.assigned_name;
-        document.getElementById('targetWishlist').innerHTML = `
-          <p class="text-amber-300 font-bold mb-1">Lista de Desejos:</p>
-          <p class="text-slate-200 mb-2">${d.description}</p>
-          ${d.reference_link ? `<a href="${d.reference_link}" target="_blank" class="text-amber-300 underline text-xs">🔗 Ver link</a>` : ''}`;
-      } else alert(d.error || 'Sorteio ainda não realizado');
-    }
-
-    // ===== UI =====
-    function switchTab(t) {
-      ['register','portal','admin'].forEach(v => {
-        document.getElementById('view' + v.charAt(0).toUpperCase() + v.slice(1)).classList.add('hidden');
-        document.getElementById('tab' + v.charAt(0).toUpperCase() + v.slice(1)).className = 'px-4 py-2 rounded-lg text-xs font-bold text-emerald-200';
-      });
-      document.getElementById('view' + t.charAt(0).toUpperCase() + t.slice(1)).classList.remove('hidden');
-      document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1)).className = 'px-4 py-2 rounded-lg text-xs font-bold tab-active';
-      if (t === 'admin') loadParticipants();
-    }
-
-    function secretAdmin() {
-      clickCount++;
-      if (clickCount >= 5) {
-        const tab = document.getElementById('tabAdmin');
-        tab.style.display = tab.style.display === 'none' ? 'inline-block' : 'none';
-        if (tab.style.display !== 'none') loadParticipants();
-        clickCount = 0;
-      }
-      setTimeout(() => clickCount = 0, 2000);
-    }
-
-    function createSnow() {
-      const c = document.getElementById('snow');
-      for (let i = 0; i < 25; i++) {
-        const f = document.createElement('div');
-        f.className = 'snowflake';
-        f.textContent = ['❄','❅','❆','•'][Math.floor(Math.random()*4)];
-        f.style.left = Math.random()*100 + 'vw';
-        f.style.animationDuration = (7 + Math.random()*8) + 's';
-        f.style.animationDelay = Math.random()*10 + 's';
-        f.style.fontSize = (0.5 + Math.random()*0.7) + 'rem';
-        c.appendChild(f);
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      createSnow();
-      loadConfig();
-      setInterval(updateCountdown, 1000);
+    const res = await fetch(API, {
+      method: 'POST',
+      body: JSON.stringify({
+        action: 'registerSelf',
+        name: document.getElementById('regName').value,
+        email: document.getElementById('regEmail').value,
+        description: document.getElementById('regWishlist').value,
+        reference_link: document.getElementById('regLink').value
+      })
     });
-  </script>
-</body>
-</html>
+    const d = await res.json();
+    if (d.success) {
+      alert('Inscrição feita com sucesso!');
+      e.target.reset();
+      switchTab('portal');
+    } else {
+      alert(d.error || 'Erro na inscrição');
+    }
+  }
+
+  async function requestOtp(e) {
+    e.preventDefault();
+    email = document.getElementById('loginEmail').value;
+    const res = await fetch(API, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'requestOtp', email })
+    });
+    const d = await res.json();
+    if (d.success) {
+      document.getElementById('codeSentText').textContent = `Código enviado para ${email}`;
+      document.getElementById('stepEmail').classList.add('hidden');
+      document.getElementById('stepCode').classList.remove('hidden');
+    } else {
+      alert(d.error || 'Erro');
+    }
+  }
+
+  async function verifyOtp(e) {
+    e.preventDefault();
+    const code = document.getElementById('loginCode').value;
+    const res = await fetch(API, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'verifyOtp', email, code })
+    });
+    const d = await res.json();
+    if (d.success) {
+      currentId = d.participant_id;
+      document.getElementById('welcomeName').textContent = `Olá, ${d.name}!`;
+      document.getElementById('stepCode').classList.add('hidden');
+      document.getElementById('stepDashboard').classList.remove('hidden');
+    } else {
+      alert(d.error || 'Código inválido');
+    }
+  }
+
+  async function openGift() {
+    const res = await fetch(`${API}?action=getResult&id=${currentId}`);
+    const d = await res.json();
+    if (d.assigned_name) {
+      document.getElementById('giftContainer').classList.add('hidden');
+      document.getElementById('giftResult').classList.remove('hidden');
+      document.getElementById('assignedName').textContent = d.assigned_name;
+      document.getElementById('targetWishlist').innerHTML = `
+        <p class="text-amber-300 font-bold mb-1">Lista de Desejos:</p>
+        <p class="text-slate-200 mb-2">${d.description}</p>
+        ${d.reference_link ? `<a href="${d.reference_link}" target="_blank" class="text-amber-300 underline text-xs">🔗 Ver link</a>` : ''}`;
+    } else {
+      alert(d.error || 'Sorteio ainda não realizado');
+    }
+  }
+
+  // ===== NAVEGAÇÃO =====
+  function switchTab(t) {
+    ['register', 'portal', 'admin'].forEach(v => {
+      const view = document.getElementById('view' + v.charAt(0).toUpperCase() + v.slice(1));
+      const tab = document.getElementById('tab' + v.charAt(0).toUpperCase() + v.slice(1));
+      if (view) view.classList.add('hidden');
+      if (tab) tab.className = 'px-4 py-2 rounded-lg text-xs font-bold text-emerald-200';
+    });
+    const activeView = document.getElementById('view' + t.charAt(0).toUpperCase() + t.slice(1));
+    const activeTab = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
+    if (activeView) activeView.classList.remove('hidden');
+    if (activeTab) activeTab.className = 'px-4 py-2 rounded-lg text-xs font-bold tab-active';
+    if (t === 'admin') loadParticipants();
+  }
+
+  function secretAdmin() {
+    clickCount++;
+    if (clickCount >= 5) {
+      const tab = document.getElementById('tabAdmin');
+      if (tab) {
+        tab.style.display = (tab.style.display === 'none' || !tab.style.display) ? 'inline-block' : 'none';
+        if (tab.style.display !== 'none') loadParticipants();
+      }
+      clickCount = 0;
+    }
+    setTimeout(() => clickCount = 0, 2000);
+  }
+
+  function createSnow() {
+    const c = document.getElementById('snow');
+    if (!c) return;
+    for (let i = 0; i < 25; i++) {
+      const f = document.createElement('div');
+      f.className = 'snowflake';
+      f.textContent = ['❄', '❅', '❆', '•'][Math.floor(Math.random() * 4)];
+      f.style.left = Math.random() * 100 + 'vw';
+      f.style.animationDuration = (7 + Math.random() * 8) + 's';
+      f.style.animationDelay = Math.random() * 10 + 's';
+      f.style.fontSize = (0.5 + Math.random() * 0.7) + 'rem';
+      c.appendChild(f);
+    }
+  }
+
+  // ===== INICIALIZAÇÃO =====
+  document.addEventListener('DOMContentLoaded', () => {
+    createSnow();
+    loadConfig();
+    setInterval(updateCountdown, 1000);
+  });
+</script>
