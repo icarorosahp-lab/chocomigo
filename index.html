@@ -173,31 +173,37 @@
         <p class="text-[11px] text-emerald-500 mt-2">“Repor Evento” apaga o sorteio e volta a abrir as inscrições.</p>
       </div>
 
-      <!-- CONFIGURAÇÕES -->
-      <div class="bg-emerald-950/40 border border-emerald-700/30 rounded-xl p-4 space-y-3">
-        <h3 class="text-sm font-semibold text-emerald-300">Configurações do Evento</h3>
+<!-- CONFIGURAÇÕES -->
+<div class="bg-emerald-950/40 border border-emerald-700/30 rounded-xl p-4 space-y-4">
+  <h3 class="text-sm font-semibold text-emerald-300">Configurações do Evento</h3>
 
-        <div>
-          <label class="block text-xs text-emerald-400 mb-1">Nome do Evento</label>
-          <input id="cfgName" class="w-full bg-emerald-950 text-white px-3 py-2.5 rounded-lg border border-emerald-700 text-sm">
-        </div>
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs text-emerald-400 mb-1">Data da Troca</label>
-            <input id="cfgEventDate" placeholder="12/12/2026" class="w-full bg-emerald-950 text-white px-3 py-2.5 rounded-lg border border-emerald-700 text-sm">
-          </div>
-          <div>
-            <label class="block text-xs text-emerald-400 mb-1">Orçamento (€)</label>
-            <input id="cfgBudget" type="number" class="w-full bg-emerald-950 text-white px-3 py-2.5 rounded-lg border border-emerald-700 text-sm">
-          </div>
-        </div>
-        <div>
-          <label class="block text-xs text-emerald-400 mb-1">Data Limite das Inscrições</label>
-          <input id="cfgDeadline" type="date" class="w-full bg-emerald-950 text-white px-3 py-2.5 rounded-lg border border-emerald-700 text-sm">
-        </div>
+  <div>
+    <label class="block text-xs text-emerald-400 mb-1">Nome do Evento</label>
+    <input id="cfgName" class="w-full bg-emerald-950 text-white px-3 py-2.5 rounded-lg border border-emerald-700 text-sm">
+  </div>
 
-        <button onclick="saveConfig()" class="w-full btn-gold font-bold py-3 rounded-xl text-sm mt-2">💾 Guardar Configurações</button>
-      </div>
+  <div>
+    <label class="block text-xs text-emerald-400 mb-1">Data e Hora da Troca</label>
+    <input id="cfgEventDate" placeholder="Ex: 12/12/2026 19:30" 
+           class="w-full bg-emerald-950 text-white px-3 py-2.5 rounded-lg border border-emerald-700 text-sm">
+    <p class="text-[11px] text-emerald-500 mt-1">Formato recomendado: DD/MM/AAAA HH:MM</p>
+  </div>
+
+  <div class="grid grid-cols-2 gap-3">
+    <div>
+      <label class="block text-xs text-emerald-400 mb-1">Orçamento máximo (€)</label>
+      <input id="cfgBudget" type="number" min="1" class="w-full bg-emerald-950 text-white px-3 py-2.5 rounded-lg border border-emerald-700 text-sm">
+    </div>
+    <div>
+      <label class="block text-xs text-emerald-400 mb-1">Data Limite Inscrições</label>
+      <input id="cfgDeadline" type="date" class="w-full bg-emerald-950 text-white px-3 py-2.5 rounded-lg border border-emerald-700 text-sm">
+    </div>
+  </div>
+
+  <button onclick="saveConfig()" class="w-full btn-gold font-bold py-3 rounded-xl text-sm mt-1">
+    💾 Guardar Configurações
+  </button>
+</div>
 
       <!-- SORTEIO -->
       <button onclick="triggerDraw()" class="w-full btn-red text-white font-bold py-3.5 rounded-xl text-sm">
